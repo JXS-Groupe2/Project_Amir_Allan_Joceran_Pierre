@@ -18,11 +18,11 @@ export class AuthComponent implements OnInit {
   }
 
   logInDropbox() {
-    
+    // TODO
   }
 
   logInOneDrive() {
-    
+    // TODO
   }
 
 }
