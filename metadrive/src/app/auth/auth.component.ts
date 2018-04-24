@@ -1,28 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { GoogleApiService } from '../google-api.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent implements OnInit {
 
-  constructor(private googleApi: GoogleApiService) { }
+  authForm: FormGroup;
+
+  constructor(private router: Router, fb: FormBuilder) {
+    this.authForm = fb.group({
+      'email': '',
+      'password': ''
+    })
+  }
 
   ngOnInit() {
   }
 
-  logInGoogle() {
-    this.googleApi.auth();
-  }
-
-  logInDropbox() {
-    // TODO
-  }
-
-  logInOneDrive() {
-    // TODO
+  submitForm(value: any) {
+    console.log("Form value:");
+    console.log(value);
+    // TODO: check credentials from server
+    this.router.navigate(['/metadrive']);
   }
 
 }

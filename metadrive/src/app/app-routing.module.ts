@@ -1,21 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthComponent } from './auth/auth.component';
 import { MainComponent } from './main/main.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'metadrive',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    redirectTo: 'login'
+  },
+  {
+    path: 'login',
+    component: AuthComponent
   },
   {
     path: 'metadrive',
     component: MainComponent
   },
   {
-    path: '**',
-    component: PageNotFoundComponent
+    path: 'oauth2callback',
+    component: MainComponent
   }
 ];
 

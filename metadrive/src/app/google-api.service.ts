@@ -19,9 +19,5 @@ export class GoogleApiService {
     var request = new HttpRequest("GET", this.oAuth2Endpoint, {params: new HttpParams({fromObject: this.authParams})});
     window.location.href = request.urlWithParams;
   }
-
-  callback() {
-    // TODO
-  }
   
 }

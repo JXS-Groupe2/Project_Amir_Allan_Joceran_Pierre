@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -8,22 +8,25 @@ import { AuthComponent } from './auth/auth.component';
 import { GoogleApiService } from './google-api.service';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ServicesAuthComponent } from './services-auth/services-auth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
     MainComponent,
-    PageNotFoundComponent
+    ServicesAuthComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [GoogleApiService],
+  providers: [
+    GoogleApiService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,28 @@
+import { Component, OnInit } from '@angular/core';
+import { GoogleApiService } from '../google-api.service';
+
+@Component({
+  selector: 'app-services-auth',
+  templateUrl: './services-auth.component.html',
+  styleUrls: ['./services-auth.component.css']
+})
+export class ServicesAuthComponent implements OnInit {
+
+  constructor(private googleApi: GoogleApiService) { }
+
+  ngOnInit() {
+  }
+
+  logInGoogle() {
+    this.googleApi.auth();
+  }
+
+  logInDropbox() {
+    // TODO
+  }
+
+  logInOneDrive() {
+    // TODO
+  }
+
+}
