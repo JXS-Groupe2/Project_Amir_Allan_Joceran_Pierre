@@ -30,19 +30,35 @@
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
         </dependency>
-
-        <!-- uncomment this to get JSON support:
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet-core</artifactId>
+			</dependency>
          <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-binding</artifactId>
         </dependency>
-        -->
+        <dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.8</version>
+		</dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.9</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+    		<version>2.5</version>
+		</dependency>
+        <dependency>
+		    <groupId>org.glassfish.jersey.media</groupId>
+		    <artifactId>jersey-media-multipart</artifactId>
+		</dependency>
     </dependencies>
 
     <build>
