@@ -26,6 +26,7 @@ import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -33,10 +34,10 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 
 @Path("dropbox")
-public class DropboxResource {
+public class DropboxREST{
 
 	//Token de test : à changer tout le temps
-	private final static String OAUTH_KEY = "G7zoVR0rS5oAAAAAAAAN5SGl0tRcwI9XKrEhpXlDtitAuPdXxalJsnli5Wt_xLvH";
+	private final static String OAUTH_KEY = "G7zoVR0rS5oAAAAAAAAN7U7cDnH_fW02aorMS-CU40AOc-z2fc8eIgKthkqIeEAz";
 	HttpsURLConnection connection = null;
 	
 	/** Get account info
@@ -167,7 +168,7 @@ public class DropboxResource {
 				
 	}
 
-	
+
 	/**
 	 * Upload a file to root folder in dropbox (for now)
 	 * TODO : Get the actual folder where the user is
@@ -176,44 +177,59 @@ public class DropboxResource {
 	 * @param fileMetaData
 	 * @return Response ok or not
 	 * @throws Exception
-	 */
-	@POST
-	@Path("uploadFile")
-	@Consumes({MediaType.MULTIPART_FORM_DATA})
-	public Response uploadFile( @FormParam("file") InputStream fileInputStream, 
-								@FormParam("file") FormDataContentDisposition fileMetaData) 
-							throws Exception {
-	    try
-	    {
-	    	Client client = Client.create();
-			WebResource webRessource = client.resource("https://content.dropboxapi.com/2/files/upload");
-			ClientResponse response = webRessource.header("Authorization", "Bearer "+OAUTH_KEY)
-					.header("Dropbox-API-Arg", "{\"path\" : \"/\",\\\"mode\\\": \\\"add\\\",\\\"autorename\\\": true,\\\"mute\\\": false}\"}")
-					.accept("application/plain;charset=dropbox-cors-hack")
-					.post(ClientResponse.class);
-		    
-			if (response.getStatus() != 200) {
-			   throw new RuntimeException("Failed : HTTP error code : "
-				+ response.getStatus());
-			}	    	
-	    	
-	    	int read = 0;
-	        byte[] bytes = new byte[1024];
 	 
-	        OutputStream out = new FileOutputStream(new File(UPLOAD_PATH + fileMetaData.getFileName()));
-	        while ((read = fileInputStream.read(bytes)) != -1)
-	        {
+	@POST
+	@Path("/uploadFile")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(
+	        @FormDataParam("file") InputStream uploadedInputStream,
+	        @FormDataParam("file") FormDataContentDisposition fileDetail,
+	        @FormDataParam("path") String path) {
+
+
+	    // Path format //localhost/Installables/uploaded/
+	    System.out.println("path:"+path);
+	    String uploadedFileLocation = path	
+	            + fileDetail.getFileName();
+
+	    // save it
+	    writeToFile(uploadedInputStream, uploadedFileLocation);
+
+	    String output = "File uploaded to : " + uploadedFileLocation;
+
+	    return Response.status(200).entity(output).build();
+
+	}
+
+	// save uploaded file to new location
+	private void writeToFile(InputStream uploadedInputStream,
+	        String uploadedFileLocation) {
+
+	    try {
+	        OutputStream out = new FileOutputStream(new File(
+	                uploadedFileLocation));
+	        int read = 0;
+	        byte[] bytes = new byte[1024];
+
+	        out = new FileOutputStream(new File(uploadedFileLocation));
+	        while ((read = uploadedInputStream.read(bytes)) != -1) {
 	            out.write(bytes, 0, read);
 	        }
-	        out.flush();
-	        out.close();
-	    } catch (IOException e)
-	    {
-	        throw new WebApplicationException("Error while uploading file. Please try again !!");
+	        Client client = Client.create();
+			WebResource webRessource = client.resource("https://content.dropboxapi.com/2/files/upload");
+			
+			ClientResponse response = webRessource.header("Authorization", "Bearer "+OAUTH_KEY)
+					.header("Dropbox-API-Arg", "{\"path:\""+uploadedFileLocation+", \"mode\": \"add\",\"autorename\": true,\"mute\": false}")
+					.header("Content-Type", "application/octet-stream")
+					.post(ClientResponse.class, out);
+			
+	    } catch (IOException e) {
+
+	        e.printStackTrace();
 	    }
-	    return Response.ok("Data uploaded successfully !!").build();
-		
+
 	}
+	*/
 
 }
 
