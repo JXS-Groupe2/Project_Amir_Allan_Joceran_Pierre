@@ -48,7 +48,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 public class DropboxREST{
 
 	//Token de test : à changer tout le temps
-	private final static String OAUTH_KEY = "G7zoVR0rS5oAAAAAAAAN8smM6tYSjGLg-Vmapz0zpiJ0vlk9VFIN5Tv29hqNYio2";
+	private final static String OAUTH_KEY = "";
 	HttpsURLConnection connection = null;
 	
 	/** Get account info
