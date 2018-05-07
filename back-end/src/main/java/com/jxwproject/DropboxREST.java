@@ -10,34 +10,45 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 @Path("dropbox")
 public class DropboxREST{
 
 	//Token de test : à changer tout le temps
-	private final static String OAUTH_KEY = "G7zoVR0rS5oAAAAAAAAN7U7cDnH_fW02aorMS-CU40AOc-z2fc8eIgKthkqIeEAz";
+	private final static String OAUTH_KEY = "G7zoVR0rS5oAAAAAAAAN8smM6tYSjGLg-Vmapz0zpiJ0vlk9VFIN5Tv29hqNYio2";
 	HttpsURLConnection connection = null;
 	
 	/** Get account info
@@ -114,6 +125,51 @@ public class DropboxREST{
 	  }
 	}
 	
+	
+	/**
+	 * List of content from a path
+	 * 
+	 * @return JSON File of the content of the folder
+	 */
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Path("listFolder")
+	public String getFolderContent(/*@PathParam("path") final String path*/) {
+		final String params = "\r\n{\r\n\"path\" : \"\", \r\n\"recursive\": false,\"include_media_info\": false,\r\n\"include_deleted\": false,\r\n\"include_has_explicit_shared_members\": false,\r\n\"include_mounted_folders\": true}";
+		try {
+			ClientConfig config = new ClientConfig();
+			javax.ws.rs.client.Client client = ClientBuilder.newClient(config);
+			WebTarget target = client.target("https://api.dropboxapi.com/2/")
+												.path("files/list_folder");
+			Response response = target.request()
+					.header("Authorization", "Bearer "+OAUTH_KEY)
+					.header("Content-Type", "application/plain;charset=dropbox-cors-hack")
+					.accept(MediaType.APPLICATION_JSON)
+					.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
+		
+			/*ClientResponse response = webRessource.header("Authorization", "Bearer "+OAUTH_KEY)
+					.accept("application/plain;charset=dropbox-cors-hack")
+					.type("application/json")
+					.post(ClientResponse.class, Entity.json(params));
+		    */
+			
+			if (response.getStatus() != 200) {
+			   throw new RuntimeException("Failed : HTTP error code : "
+				+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+			}
+
+			String output = response.readEntity(String.class);
+
+			return output;
+	  } catch (Exception e) {
+		    e.printStackTrace();
+		    return null;
+	  } finally {
+		    if (connection != null) {
+		      connection.disconnect();
+		    }
+	  }
+	}
 	
 	/** Download file in browser from dropbox with file path
 	 * 
