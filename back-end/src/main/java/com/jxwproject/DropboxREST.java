@@ -125,7 +125,6 @@ public class DropboxREST{
 	  }
 	}
 	
-	
 	/**
 	 * List of content from a path
 	 * 
@@ -134,7 +133,8 @@ public class DropboxREST{
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	@Path("listFolder")
-	public String getFolderContent(/*@PathParam("path") final String path*/) {
+	public String getRootContent() {
+
 		final String params = "\r\n{\r\n\"path\" : \"\", \r\n\"recursive\": false,\"include_media_info\": false,\r\n\"include_deleted\": false,\r\n\"include_has_explicit_shared_members\": false,\r\n\"include_mounted_folders\": true}";
 		try {
 			ClientConfig config = new ClientConfig();
@@ -146,12 +146,49 @@ public class DropboxREST{
 					.header("Content-Type", "application/plain;charset=dropbox-cors-hack")
 					.accept(MediaType.APPLICATION_JSON)
 					.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
+			
+			if (response.getStatus() != 200) {
+			   throw new RuntimeException("Failed : HTTP error code : "
+				+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+			}
+
+			String output = response.readEntity(String.class);
+
+			return output;
+	  } catch (Exception e) {
+		    e.printStackTrace();
+		    return null;
+	  } finally {
+		    if (connection != null) {
+		      connection.disconnect();
+		    }
+	  }
+	}
+	
+	
+	/**
+	 * List of content from a path
+	 * 
+	 * @return JSON File of the content of the folder
+	 */
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	@Path("listFolder/{path}")
+	public String getFolderContent(@PathParam("path") final String path) {
+		String finalPath;
+		finalPath = "/"+path;
 		
-			/*ClientResponse response = webRessource.header("Authorization", "Bearer "+OAUTH_KEY)
-					.accept("application/plain;charset=dropbox-cors-hack")
-					.type("application/json")
-					.post(ClientResponse.class, Entity.json(params));
-		    */
+		final String params = "\r\n{\r\n\"path\" : \""+finalPath+"\", \r\n\"recursive\": false,\"include_media_info\": false,\r\n\"include_deleted\": false,\r\n\"include_has_explicit_shared_members\": false,\r\n\"include_mounted_folders\": true}";
+		try {
+			ClientConfig config = new ClientConfig();
+			javax.ws.rs.client.Client client = ClientBuilder.newClient(config);
+			WebTarget target = client.target("https://api.dropboxapi.com/2/")
+												.path("files/list_folder");
+			Response response = target.request()
+					.header("Authorization", "Bearer "+OAUTH_KEY)
+					.header("Content-Type", "application/plain;charset=dropbox-cors-hack")
+					.accept(MediaType.APPLICATION_JSON)
+					.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
 			
 			if (response.getStatus() != 200) {
 			   throw new RuntimeException("Failed : HTTP error code : "
