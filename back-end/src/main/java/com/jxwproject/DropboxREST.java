@@ -36,8 +36,11 @@ import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jxwproject.fichiers.DropboxFileRessource;
+import com.jxwproject.fichiers.DropboxMetadataDeserializer;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -48,7 +51,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 public class DropboxREST{
 
 	//Token de test : à changer tout le temps
-	private final static String OAUTH_KEY = "";
+	private final static String OAUTH_KEY = "G7zoVR0rS5oAAAAAAAAN9tmXZyESnMYUsTRFCKwwo58DxBTRT1DN2cM6BhGrXlzz";
 	HttpsURLConnection connection = null;
 	
 	/** Get account info
@@ -76,6 +79,53 @@ public class DropboxREST{
 			String output = response.getEntity(String.class);
 
 			return output;
+	  } catch (Exception e) {
+		    e.printStackTrace();
+		    return null;
+	  } finally {
+		    if (connection != null) {
+		      connection.disconnect();
+		    }
+	  }
+	}
+	
+	/**
+	 * Get File MetaData
+	 * 
+	 * @return the metadata of the file, for now in string format in the browser
+	 */
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("getFileMetadata/{filepath}")
+	public String getFileMetadata(@PathParam("filepath") String filepath) {
+		String finalPath;
+		finalPath = "/"+filepath;
+		
+		final String params = "\r\n{\r\n\"path\" : \""+finalPath+"\", \r\n\"include_media_info\": false,\r\n\"include_deleted\": false,\r\n\"include_has_explicit_shared_members\": false}";
+		try {
+			ClientConfig config = new ClientConfig();
+			javax.ws.rs.client.Client client = ClientBuilder.newClient(config);
+			WebTarget target = client.target("https://api.dropboxapi.com/2/")
+												.path("files/get_metadata");
+			Response response = target.request()
+					.header("Authorization", "Bearer "+OAUTH_KEY)
+					.header("Content-Type", "application/plain;charset=dropbox-cors-hack")
+					.accept(MediaType.APPLICATION_JSON)
+					.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
+			
+			if (response.getStatus() != 200) {
+			   throw new RuntimeException("Failed : HTTP error code : "
+				+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+			}
+
+			String output = response.readEntity(String.class);
+			JsonParser parser = new JsonParser();
+			JsonObject json = parser.parse(output).getAsJsonObject();
+			
+			DropboxFileRessource dpf = DropboxMetadataDeserializer.deserialize(json);
+
+			String textoutput = "nom : "+dpf.getName() + " | id : "+dpf.getId() + " | path : "+ dpf.getPath();
+			return textoutput;
 	  } catch (Exception e) {
 		    e.printStackTrace();
 		    return null;
