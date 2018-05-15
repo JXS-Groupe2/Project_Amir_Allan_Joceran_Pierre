@@ -124,7 +124,7 @@ public class DropboxREST{
 			
 			DropboxFileRessource dpf = DropboxMetadataDeserializer.deserialize(json);
 
-			String textoutput = "nom : "+dpf.getName() + " | id : "+dpf.getId() + " | path : "+ dpf.getPath();
+			String textoutput = "nom : "+dpf.getName() + " | id : "+dpf.getId() + " | path : "+ dpf.getPath() +"| type : "+dpf.getFileType();
 			return textoutput;
 	  } catch (Exception e) {
 		    e.printStackTrace();

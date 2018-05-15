@@ -15,9 +15,13 @@ public class DropboxMetadataDeserializer{
 		//final JsonObject jsonObject = json.getAsJsonObject();
 		DropboxFileRessource dropboxFile = new DropboxFileRessource();
 		
-		if(jsonObject.get(".tag").getAsString() == FileType.FILE.toString()) {
+		String fileType = jsonObject.get(".tag").getAsString();
+		
+		System.out.println("FileType : " +fileType);
+				
+		if(fileType == FileType.FILE.toString()) {
 			dropboxFile.setFileType(FileType.FILE);
-		} else {
+		} else if(fileType == FileType.FOLDER.toString()) {
 			dropboxFile.setFileType(FileType.FOLDER);
 		}
 		
