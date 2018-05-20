@@ -18,7 +18,7 @@ const routes: Routes = [
     component: MainComponent
   },
   {
-    path: 'oauth2callback',
+    path: 'googledrivecallback',
     component: MainComponent
   }
 ];

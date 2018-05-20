@@ -15,7 +15,7 @@ import { ServicesAuthComponent } from './services-auth/services-auth.component';
     AppComponent,
     AuthComponent,
     MainComponent,
-    ServicesAuthComponent
+    ServicesAuthComponent,
   ],
   imports: [
     BrowserModule,

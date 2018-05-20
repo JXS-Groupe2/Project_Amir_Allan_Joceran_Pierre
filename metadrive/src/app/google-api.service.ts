@@ -9,7 +9,7 @@ export class GoogleApiService {
     // TODO extraire les informations d'un fichier non versionné
     client_id: "291138564912-q6dh8mlriam2s9msgiv8te83iaaja8u1.apps.googleusercontent.com",
     scope: "https://www.googleapis.com/auth/drive",
-    redirect_uri: "http://localhost:4200/oauth2callback",
+    redirect_uri: "http://localhost:4200/googledrivecallback",
     response_type: "token"
   }
 
