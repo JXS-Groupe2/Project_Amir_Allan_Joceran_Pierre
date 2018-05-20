@@ -1,3 +1,16 @@
-<button class="btn btn-primary" (click)="logInGoogle()">Log in Google</button>
-<button class="btn btn-primary" (click)="logInDropbox()">Log in Dropbox</button>
-<button class="btn btn-primary" (click)="logInOneDrive()">Log in OneDrive</button>
+<div class="container col-lg-3">
+  <div class="card">
+    <div class="card-header">Bienvenue !</div>
+    <div class="card-block">
+      <form [formGroup]="authForm" (ngSubmit)="submitForm(authForm.value)">
+        <div class="form-group">
+          <input type="email" class="form-control" id="email" placeholder="E-mail" [formControl]="authForm.controls['email']">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="password" placeholder="Mot de passe" [formControl]="authForm.controls['password']">
+        </div>
+        <button type="submit" class="btn btn-primary container">Se connecter</button>
+      </form>
+    </div>
+  </div>
+</div>
