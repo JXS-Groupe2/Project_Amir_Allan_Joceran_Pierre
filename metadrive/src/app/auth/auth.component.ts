@@ -35,7 +35,7 @@ export class AuthComponent implements OnInit {
 
       this.backend.logInUser(credentials).subscribe(resp => {
         if (resp.status == 200) {
-          localStorage.setItem("userEmail", resp.body.toString());
+          localStorage.setItem("userId", resp.body.toString());
           this.router.navigate(["/metadrive"]);
         } else {
           this.areCredentialsIncorrect = true;
