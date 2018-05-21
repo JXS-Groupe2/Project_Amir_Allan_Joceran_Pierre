@@ -64,7 +64,7 @@ public class UsersResource {
 	
 
 	@GET
-	@Path("/{user}/dropbox")
+	@Path("/{user}/google")
 	public String getGoogleToken(@PathParam("user") final String user){
 		int userIndex=Integer.getInteger(user);
 		if(userIndex>=users.size()){
