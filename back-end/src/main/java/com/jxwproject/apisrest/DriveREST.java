@@ -1,10 +1,12 @@
-package com.jxwproject;
+package com.jxwproject.apisrest;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -21,25 +23,26 @@ import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jxwproject.fichiers.dropbox.DropboxFileRessource;
+import com.jxwproject.fichiers.googledrive.GoogleDriveFileRessource;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-@Path("/drive")
 public class DriveREST {
 
-	private String token = "ya29.Glu5BX5E_CPeT78i9VQHs_VOqlHj_BVE71djvALeNL0_wAxZ8TxnFhN3y1pONdet6x7_-aGIDWwEiw7TDkpCxfyVS5JwH9o-7iufWHNheaTVwel2HxGsttbGctHP";
+	//private String token = "ya29.Glu5BX5E_CPeT78i9VQHs_VOqlHj_BVE71djvALeNL0_wAxZ8TxnFhN3y1pONdet6x7_-aGIDWwEiw7TDkpCxfyVS5JwH9o-7iufWHNheaTVwel2HxGsttbGctHP";
 	
 	
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	@Path("/infos")
-	public String getInfos() {
+	public String getInfos(String token) {
 
 		Client client = Client.create();
 		WebResource webResource = client.resource("https://www.googleapis.com/drive/v3/").path("about")
@@ -60,8 +63,7 @@ public class DriveREST {
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	@Path("/files")
-	public String getFilesList() {
+	public static List<GoogleDriveFileRessource> getFilesList(String token) {
 
 		Client client = Client.create();
 		WebResource webResource = client.resource("https://www.googleapis.com/drive/v3/files");
@@ -75,14 +77,24 @@ public class DriveREST {
 		}
 		String output = response.getEntity(String.class);
 
-		return output;
+		Gson gson = new Gson();
+		List<GoogleDriveFileRessource> gdfrList = new ArrayList<GoogleDriveFileRessource>();
+		JsonParser parser = new JsonParser();
+		
+		JsonObject root = parser.parse(output).getAsJsonObject();
+		JsonArray fileList = root.getAsJsonArray("entities");
+		GoogleDriveFileRessource gdfr;
+		for (JsonElement file : fileList) {
+		    gdfr = gson.fromJson(file, GoogleDriveFileRessource.class);
+		    gdfrList.add(gdfr);
+		}
+		return gdfrList;
 
 	}
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	@Path("/{file}")
-	public String fileInfo(@PathParam("file") final String file) {
+	public String fileInfo(String token, final String file) {
 
 		System.out.println(file);
 		Client client = Client.create();
@@ -105,16 +117,14 @@ public class DriveREST {
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	@Path("/{file}/parent")
-	public String fileParent(@PathParam("file") final String file) {
+	public String fileParent(final String token, final String file) {
 
-		return fileAttributs(file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
+		return fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
 
 	}
 	
 	@GET
-	@Path("/{folder}/children")
-	public String[] fileChildren(@PathParam("folder") final String folder) {
+	public String[] fileChildren(String token, final String folder) {
 
 		Client client = Client.create();
 		WebResource webResource = client.resource("https://www.googleapis.com/drive/v2/files/").path(folder).path("children");
@@ -141,8 +151,7 @@ public class DriveREST {
 	}
 
 	@GET
-	@Path("/{file}/download")
-	public Response downloadFile(@PathParam("file") final String file) {
+	public Response downloadFile(final String token, final String file) {
 
 		StreamingOutput fileStream = new StreamingOutput() {
 			@Override
@@ -173,13 +182,12 @@ public class DriveREST {
 			}
 		};
 		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM)
-				.header("content-disposition", "attachment; filename = " + fileAttributs(file, "title").getAsString()).build();
+				.header("content-disposition", "attachment; filename = " + fileAttributs(token, file, "title").getAsString()).build();
 
 	}
 
 	@GET
-	@Path("/{file}/export")
-	public Response exeportFile(@PathParam("file") final String file) {
+	public Response exeportFile(final String token, final String file) {
 
 		StreamingOutput fileStream = new StreamingOutput() {
 			@Override
@@ -208,13 +216,12 @@ public class DriveREST {
 		};
 		
 		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM)
-				.header("content-disposition", "attachment; filename = "+fileAttributs(file, "title").getAsString()+".pdf").build();
+				.header("content-disposition", "attachment; filename = "+fileAttributs(token, file, "title").getAsString()+".pdf").build();
 
 	}
 
 	@DELETE
-	@Path("/{file}")
-	public String removeFile(@PathParam("file") final String file) {
+	public String removeFile(String token, final String file) {
 
 		Client client = Client.create();
 		WebResource webResource = client.resource("https://www.googleapis.com/drive/v3/files/").path(file);
@@ -234,7 +241,6 @@ public class DriveREST {
 
 	
 	@GET
-	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(@FormDataParam("file") InputStream uploadedInputSteam,
 			@FormDataParam("file") FormDataContentDisposition fileDetail){
@@ -260,7 +266,7 @@ public class DriveREST {
 	// ************************ internal methods ************************
 
 
-	public JsonElement fileAttributs(final String file, final String att) {
+	public JsonElement fileAttributs(final String token, final String file, final String att) {
 
 		Client client = Client.create();
 		WebResource webResource = client.resource("https://www.googleapis.com/drive/v2/files/").path(file);

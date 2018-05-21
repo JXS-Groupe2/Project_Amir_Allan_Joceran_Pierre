@@ -9,55 +9,34 @@ public class GoogleDriveFileRessource {
 
     @SerializedName("kind")
     @Expose
-    private String fileType;
+    private String kind;
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("name")
+    @SerializedName("etag")
     @Expose
-    private String name;
-    @SerializedName("mimeType")
+    private String etag;
+    @SerializedName("selfLink")
     @Expose
-    private String mimeType;
-    @SerializedName("description")
-    @Expose
-    private String description;
-    @SerializedName("starred")
-    @Expose
-    private String starred;
-    @SerializedName("trashed")
-    @Expose
-    private String trashed;
-    @SerializedName("explicitlyTrashed")
-    @Expose
-    private String explicitlyTrashed;
-    @SerializedName("trashingUser")
-    @Expose
-    private TrashingUser trashingUser;
-    @SerializedName("trashedTime")
-    @Expose
-    private String trashedTime;
-    @SerializedName("parents")
-    @Expose
-    private List<String> parents = null;
-    @SerializedName("properties")
-    @Expose
-    private Properties properties;
-    @SerializedName("appProperties")
-    @Expose
-    private AppProperties appProperties;
-    @SerializedName("spaces")
-    @Expose
-    private List<String> spaces = null;
-    @SerializedName("version")
-    @Expose
-    private String version;
+    private String selfLink;
     @SerializedName("webContentLink")
     @Expose
     private String webContentLink;
     @SerializedName("webViewLink")
     @Expose
     private String webViewLink;
+    @SerializedName("alternateLink")
+    @Expose
+    private String alternateLink;
+    @SerializedName("embedLink")
+    @Expose
+    private String embedLink;
+    @SerializedName("openWithLinks")
+    @Expose
+    private OpenWithLinks openWithLinks;
+    @SerializedName("defaultOpenWithLink")
+    @Expose
+    private String defaultOpenWithLink;
     @SerializedName("iconLink")
     @Expose
     private String iconLink;
@@ -70,54 +49,60 @@ public class GoogleDriveFileRessource {
     @SerializedName("thumbnailVersion")
     @Expose
     private String thumbnailVersion;
-    @SerializedName("viewedByMe")
+    @SerializedName("thumbnail")
     @Expose
-    private String viewedByMe;
-    @SerializedName("viewedByMeTime")
+    private Thumbnail thumbnail;
+    @SerializedName("title")
     @Expose
-    private String viewedByMeTime;
-    @SerializedName("createdTime")
+    private String title;
+    @SerializedName("mimeType")
     @Expose
-    private String createdTime;
-    @SerializedName("modifiedTime")
+    private String mimeType;
+    @SerializedName("description")
     @Expose
-    private String modifiedTime;
-    @SerializedName("modifiedByMeTime")
+    private String description;
+    @SerializedName("labels")
     @Expose
-    private String modifiedByMeTime;
-    @SerializedName("modifiedByMe")
+    private Labels labels;
+    @SerializedName("createdDate")
     @Expose
-    private String modifiedByMe;
-    @SerializedName("sharedWithMeTime")
+    private String createdDate;
+    @SerializedName("modifiedDate")
     @Expose
-    private String sharedWithMeTime;
+    private String modifiedDate;
+    @SerializedName("modifiedByMeDate")
+    @Expose
+    private String modifiedByMeDate;
+    @SerializedName("lastViewedByMeDate")
+    @Expose
+    private String lastViewedByMeDate;
+    @SerializedName("markedViewedByMeDate")
+    @Expose
+    private String markedViewedByMeDate;
+    @SerializedName("sharedWithMeDate")
+    @Expose
+    private String sharedWithMeDate;
+    @SerializedName("version")
+    @Expose
+    private String version;
     @SerializedName("sharingUser")
     @Expose
     private SharingUser sharingUser;
-    @SerializedName("owners")
+    @SerializedName("parents")
     @Expose
-    private List<Owner> owners = null;
-    @SerializedName("teamDriveId")
+    private List<String> parents = null;
+    @SerializedName("downloadUrl")
     @Expose
-    private String teamDriveId;
-    @SerializedName("lastModifyingUser")
+    private String downloadUrl;
+    @SerializedName("exportLinks")
     @Expose
-    private LastModifyingUser lastModifyingUser;
-    @SerializedName("shared")
+    private ExportLinks exportLinks;
+    @SerializedName("indexableText")
     @Expose
-    private String shared;
-    @SerializedName("ownedByMe")
+    private IndexableText indexableText;
+    @SerializedName("userPermission")
     @Expose
-    private String ownedByMe;
-    @SerializedName("capabilities")
-    @Expose
-    private Capabilities capabilities;
-    @SerializedName("viewersCanCopyContent")
-    @Expose
-    private String viewersCanCopyContent;
-    @SerializedName("writersCanShare")
-    @Expose
-    private String writersCanShare;
+    private String userPermission;
     @SerializedName("permissions")
     @Expose
     private List<String> permissions = null;
@@ -127,39 +112,96 @@ public class GoogleDriveFileRessource {
     @SerializedName("hasAugmentedPermissions")
     @Expose
     private String hasAugmentedPermissions;
-    @SerializedName("folderColorRgb")
-    @Expose
-    private String folderColorRgb;
     @SerializedName("originalFilename")
     @Expose
     private String originalFilename;
-    @SerializedName("fullFileExtension")
-    @Expose
-    private String fullFileExtension;
     @SerializedName("fileExtension")
     @Expose
     private String fileExtension;
+    @SerializedName("fullFileExtension")
+    @Expose
+    private String fullFileExtension;
     @SerializedName("md5Checksum")
     @Expose
     private String md5Checksum;
-    @SerializedName("size")
+    @SerializedName("fileSize")
     @Expose
-    private String size;
+    private String fileSize;
     @SerializedName("quotaBytesUsed")
     @Expose
     private String quotaBytesUsed;
+    @SerializedName("ownerNames")
+    @Expose
+    private List<String> ownerNames = null;
+    @SerializedName("owners")
+    @Expose
+    private List<Owner> owners = null;
+    @SerializedName("teamDriveId")
+    @Expose
+    private String teamDriveId;
+    @SerializedName("lastModifyingUserName")
+    @Expose
+    private String lastModifyingUserName;
+    @SerializedName("lastModifyingUser")
+    @Expose
+    private LastModifyingUser lastModifyingUser;
+    @SerializedName("ownedByMe")
+    @Expose
+    private String ownedByMe;
+    @SerializedName("capabilities")
+    @Expose
+    private Capabilities capabilities;
+    @SerializedName("editable")
+    @Expose
+    private String editable;
+    @SerializedName("canComment")
+    @Expose
+    private String canComment;
+    @SerializedName("canReadRevisions")
+    @Expose
+    private String canReadRevisions;
+    @SerializedName("shareable")
+    @Expose
+    private String shareable;
+    @SerializedName("copyable")
+    @Expose
+    private String copyable;
+    @SerializedName("writersCanShare")
+    @Expose
+    private String writersCanShare;
+    @SerializedName("shared")
+    @Expose
+    private String shared;
+    @SerializedName("explicitlyTrashed")
+    @Expose
+    private String explicitlyTrashed;
+    @SerializedName("trashingUser")
+    @Expose
+    private TrashingUser trashingUser;
+    @SerializedName("trashedDate")
+    @Expose
+    private String trashedDate;
+    @SerializedName("appDataContents")
+    @Expose
+    private String appDataContents;
     @SerializedName("headRevisionId")
     @Expose
     private String headRevisionId;
-    @SerializedName("contentHints")
+    @SerializedName("properties")
     @Expose
-    private ContentHints contentHints;
+    private List<String> properties = null;
+    @SerializedName("folderColorRgb")
+    @Expose
+    private String folderColorRgb;
     @SerializedName("imageMediaMetadata")
     @Expose
     private ImageMediaMetadata imageMediaMetadata;
     @SerializedName("videoMediaMetadata")
     @Expose
     private VideoMediaMetadata videoMediaMetadata;
+    @SerializedName("spaces")
+    @Expose
+    private List<String> spaces = null;
     @SerializedName("isAppAuthorized")
     @Expose
     private String isAppAuthorized;
@@ -174,120 +216,148 @@ public class GoogleDriveFileRessource {
     /**
      * 
      * @param md5Checksum
+     * @param etag
+     * @param canComment
+     * @param userPermission
      * @param ownedByMe
-     * @param viewersCanCopyContent
+     * @param downloadUrl
      * @param webContentLink
+     * @param exportLinks
      * @param lastModifyingUser
+     * @param lastModifyingUserName
+     * @param alternateLink
      * @param fullFileExtension
      * @param imageMediaMetadata
-     * @param viewedByMeTime
      * @param webViewLink
+     * @param sharedWithMeDate
      * @param description
      * @param permissions
+     * @param trashedDate
      * @param originalFilename
+     * @param createdDate
      * @param mimeType
      * @param shared
      * @param fileExtension
      * @param spaces
-     * @param appProperties
      * @param iconLink
-     * @param modifiedByMeTime
      * @param hasThumbnail
+     * @param modifiedByMeDate
+     * @param labels
      * @param isAppAuthorized
      * @param quotaBytesUsed
      * @param properties
+     * @param selfLink
      * @param hasAugmentedPermissions
-     * @param size
-     * @param sharedWithMeTime
+     * @param ownerNames
+     * @param canReadRevisions
+     * @param editable
+     * @param openWithLinks
+     * @param copyable
+     * @param thumbnail
      * @param thumbnailLink
      * @param trashingUser
-     * @param modifiedByMe
      * @param owners
      * @param videoMediaMetadata
      * @param parents
-     * @param kind
+     * @param embedLink
+     * @param lastViewedByMeDate
      * @param folderColorRgb
+     * @param kind
      * @param version
      * @param id
-     * @param trashedTime
+     * @param fileSize
+     * @param title
      * @param thumbnailVersion
-     * @param trashed
      * @param sharingUser
-     * @param name
-     * @param viewedByMe
      * @param teamDriveId
-     * @param createdTime
-     * @param contentHints
+     * @param appDataContents
+     * @param shareable
      * @param writersCanShare
-     * @param modifiedTime
-     * @param starred
+     * @param markedViewedByMeDate
+     * @param modifiedDate
+     * @param indexableText
+     * @param defaultOpenWithLink
      * @param permissionIds
      * @param explicitlyTrashed
      * @param capabilities
      * @param headRevisionId
      */
-    public GoogleDriveFileRessource(String fileType, String id, String name, String mimeType, String description, String starred, String trashed, String explicitlyTrashed, TrashingUser trashingUser, String trashedTime, List<String> parents, Properties properties, AppProperties appProperties, List<String> spaces, String version, String webContentLink, String webViewLink, String iconLink, String hasThumbnail, String thumbnailLink, String thumbnailVersion, String viewedByMe, String viewedByMeTime, String createdTime, String modifiedTime, String modifiedByMeTime, String modifiedByMe, String sharedWithMeTime, SharingUser sharingUser, List<Owner> owners, String teamDriveId, LastModifyingUser lastModifyingUser, String shared, String ownedByMe, Capabilities capabilities, String viewersCanCopyContent, String writersCanShare, List<String> permissions, List<String> permissionIds, String hasAugmentedPermissions, String folderColorRgb, String originalFilename, String fullFileExtension, String fileExtension, String md5Checksum, String size, String quotaBytesUsed, String headRevisionId, ContentHints contentHints, ImageMediaMetadata imageMediaMetadata, VideoMediaMetadata videoMediaMetadata, String isAppAuthorized) {
+    public GoogleDriveFileRessource(String kind, String id, String etag, String selfLink, String webContentLink, String webViewLink, String alternateLink, String embedLink, OpenWithLinks openWithLinks, String defaultOpenWithLink, String iconLink, String hasThumbnail, String thumbnailLink, String thumbnailVersion, Thumbnail thumbnail, String title, String mimeType, String description, Labels labels, String createdDate, String modifiedDate, String modifiedByMeDate, String lastViewedByMeDate, String markedViewedByMeDate, String sharedWithMeDate, String version, SharingUser sharingUser, List<String> parents, String downloadUrl, ExportLinks exportLinks, IndexableText indexableText, String userPermission, List<String> permissions, List<String> permissionIds, String hasAugmentedPermissions, String originalFilename, String fileExtension, String fullFileExtension, String md5Checksum, String fileSize, String quotaBytesUsed, List<String> ownerNames, List<Owner> owners, String teamDriveId, String lastModifyingUserName, LastModifyingUser lastModifyingUser, String ownedByMe, Capabilities capabilities, String editable, String canComment, String canReadRevisions, String shareable, String copyable, String writersCanShare, String shared, String explicitlyTrashed, TrashingUser trashingUser, String trashedDate, String appDataContents, String headRevisionId, List<String> properties, String folderColorRgb, ImageMediaMetadata imageMediaMetadata, VideoMediaMetadata videoMediaMetadata, List<String> spaces, String isAppAuthorized) {
         super();
-        this.fileType = fileType;
+        this.kind = kind;
         this.id = id;
-        this.name = name;
-        this.mimeType = mimeType;
-        this.description = description;
-        this.starred = starred;
-        this.trashed = trashed;
-        this.explicitlyTrashed = explicitlyTrashed;
-        this.trashingUser = trashingUser;
-        this.trashedTime = trashedTime;
-        this.parents = parents;
-        this.properties = properties;
-        this.appProperties = appProperties;
-        this.spaces = spaces;
-        this.version = version;
+        this.etag = etag;
+        this.selfLink = selfLink;
         this.webContentLink = webContentLink;
         this.webViewLink = webViewLink;
+        this.alternateLink = alternateLink;
+        this.embedLink = embedLink;
+        this.openWithLinks = openWithLinks;
+        this.defaultOpenWithLink = defaultOpenWithLink;
         this.iconLink = iconLink;
         this.hasThumbnail = hasThumbnail;
         this.thumbnailLink = thumbnailLink;
         this.thumbnailVersion = thumbnailVersion;
-        this.viewedByMe = viewedByMe;
-        this.viewedByMeTime = viewedByMeTime;
-        this.createdTime = createdTime;
-        this.modifiedTime = modifiedTime;
-        this.modifiedByMeTime = modifiedByMeTime;
-        this.modifiedByMe = modifiedByMe;
-        this.sharedWithMeTime = sharedWithMeTime;
+        this.thumbnail = thumbnail;
+        this.title = title;
+        this.mimeType = mimeType;
+        this.description = description;
+        this.labels = labels;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.modifiedByMeDate = modifiedByMeDate;
+        this.lastViewedByMeDate = lastViewedByMeDate;
+        this.markedViewedByMeDate = markedViewedByMeDate;
+        this.sharedWithMeDate = sharedWithMeDate;
+        this.version = version;
         this.sharingUser = sharingUser;
-        this.owners = owners;
-        this.teamDriveId = teamDriveId;
-        this.lastModifyingUser = lastModifyingUser;
-        this.shared = shared;
-        this.ownedByMe = ownedByMe;
-        this.capabilities = capabilities;
-        this.viewersCanCopyContent = viewersCanCopyContent;
-        this.writersCanShare = writersCanShare;
+        this.parents = parents;
+        this.downloadUrl = downloadUrl;
+        this.exportLinks = exportLinks;
+        this.indexableText = indexableText;
+        this.userPermission = userPermission;
         this.permissions = permissions;
         this.permissionIds = permissionIds;
         this.hasAugmentedPermissions = hasAugmentedPermissions;
-        this.folderColorRgb = folderColorRgb;
         this.originalFilename = originalFilename;
-        this.fullFileExtension = fullFileExtension;
         this.fileExtension = fileExtension;
+        this.fullFileExtension = fullFileExtension;
         this.md5Checksum = md5Checksum;
-        this.size = size;
+        this.fileSize = fileSize;
         this.quotaBytesUsed = quotaBytesUsed;
+        this.ownerNames = ownerNames;
+        this.owners = owners;
+        this.teamDriveId = teamDriveId;
+        this.lastModifyingUserName = lastModifyingUserName;
+        this.lastModifyingUser = lastModifyingUser;
+        this.ownedByMe = ownedByMe;
+        this.capabilities = capabilities;
+        this.editable = editable;
+        this.canComment = canComment;
+        this.canReadRevisions = canReadRevisions;
+        this.shareable = shareable;
+        this.copyable = copyable;
+        this.writersCanShare = writersCanShare;
+        this.shared = shared;
+        this.explicitlyTrashed = explicitlyTrashed;
+        this.trashingUser = trashingUser;
+        this.trashedDate = trashedDate;
+        this.appDataContents = appDataContents;
         this.headRevisionId = headRevisionId;
-        this.contentHints = contentHints;
+        this.properties = properties;
+        this.folderColorRgb = folderColorRgb;
         this.imageMediaMetadata = imageMediaMetadata;
         this.videoMediaMetadata = videoMediaMetadata;
+        this.spaces = spaces;
         this.isAppAuthorized = isAppAuthorized;
     }
 
-    public String getFileType() {
-        return fileType;
+    public String getKind() {
+        return kind;
     }
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getId() {
@@ -298,108 +368,20 @@ public class GoogleDriveFileRessource {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEtag() {
+        return etag;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEtag(String etag) {
+        this.etag = etag;
     }
 
-    public String getMimeType() {
-        return mimeType;
+    public String getSelfLink() {
+        return selfLink;
     }
 
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStarred() {
-        return starred;
-    }
-
-    public void setStarred(String starred) {
-        this.starred = starred;
-    }
-
-    public String getTrashed() {
-        return trashed;
-    }
-
-    public void setTrashed(String trashed) {
-        this.trashed = trashed;
-    }
-
-    public String getExplicitlyTrashed() {
-        return explicitlyTrashed;
-    }
-
-    public void setExplicitlyTrashed(String explicitlyTrashed) {
-        this.explicitlyTrashed = explicitlyTrashed;
-    }
-
-    public TrashingUser getTrashingUser() {
-        return trashingUser;
-    }
-
-    public void setTrashingUser(TrashingUser trashingUser) {
-        this.trashingUser = trashingUser;
-    }
-
-    public String getTrashedTime() {
-        return trashedTime;
-    }
-
-    public void setTrashedTime(String trashedTime) {
-        this.trashedTime = trashedTime;
-    }
-
-    public List<String> getParents() {
-        return parents;
-    }
-
-    public void setParents(List<String> parents) {
-        this.parents = parents;
-    }
-
-    public Properties getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
-
-    public AppProperties getAppProperties() {
-        return appProperties;
-    }
-
-    public void setAppProperties(AppProperties appProperties) {
-        this.appProperties = appProperties;
-    }
-
-    public List<String> getSpaces() {
-        return spaces;
-    }
-
-    public void setSpaces(List<String> spaces) {
-        this.spaces = spaces;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    public void setSelfLink(String selfLink) {
+        this.selfLink = selfLink;
     }
 
     public String getWebContentLink() {
@@ -416,6 +398,38 @@ public class GoogleDriveFileRessource {
 
     public void setWebViewLink(String webViewLink) {
         this.webViewLink = webViewLink;
+    }
+
+    public String getAlternateLink() {
+        return alternateLink;
+    }
+
+    public void setAlternateLink(String alternateLink) {
+        this.alternateLink = alternateLink;
+    }
+
+    public String getEmbedLink() {
+        return embedLink;
+    }
+
+    public void setEmbedLink(String embedLink) {
+        this.embedLink = embedLink;
+    }
+
+    public OpenWithLinks getOpenWithLinks() {
+        return openWithLinks;
+    }
+
+    public void setOpenWithLinks(OpenWithLinks openWithLinks) {
+        this.openWithLinks = openWithLinks;
+    }
+
+    public String getDefaultOpenWithLink() {
+        return defaultOpenWithLink;
+    }
+
+    public void setDefaultOpenWithLink(String defaultOpenWithLink) {
+        this.defaultOpenWithLink = defaultOpenWithLink;
     }
 
     public String getIconLink() {
@@ -450,60 +464,100 @@ public class GoogleDriveFileRessource {
         this.thumbnailVersion = thumbnailVersion;
     }
 
-    public String getViewedByMe() {
-        return viewedByMe;
+    public Thumbnail getThumbnail() {
+        return thumbnail;
     }
 
-    public void setViewedByMe(String viewedByMe) {
-        this.viewedByMe = viewedByMe;
+    public void setThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
-    public String getViewedByMeTime() {
-        return viewedByMeTime;
+    public String getTitle() {
+        return title;
     }
 
-    public void setViewedByMeTime(String viewedByMeTime) {
-        this.viewedByMeTime = viewedByMeTime;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getCreatedTime() {
-        return createdTime;
+    public String getMimeType() {
+        return mimeType;
     }
 
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
-    public String getModifiedTime() {
-        return modifiedTime;
+    public String getDescription() {
+        return description;
     }
 
-    public void setModifiedTime(String modifiedTime) {
-        this.modifiedTime = modifiedTime;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getModifiedByMeTime() {
-        return modifiedByMeTime;
+    public Labels getLabels() {
+        return labels;
     }
 
-    public void setModifiedByMeTime(String modifiedByMeTime) {
-        this.modifiedByMeTime = modifiedByMeTime;
+    public void setLabels(Labels labels) {
+        this.labels = labels;
     }
 
-    public String getModifiedByMe() {
-        return modifiedByMe;
+    public String getCreatedDate() {
+        return createdDate;
     }
 
-    public void setModifiedByMe(String modifiedByMe) {
-        this.modifiedByMe = modifiedByMe;
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public String getSharedWithMeTime() {
-        return sharedWithMeTime;
+    public String getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setSharedWithMeTime(String sharedWithMeTime) {
-        this.sharedWithMeTime = sharedWithMeTime;
+    public void setModifiedDate(String modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public String getModifiedByMeDate() {
+        return modifiedByMeDate;
+    }
+
+    public void setModifiedByMeDate(String modifiedByMeDate) {
+        this.modifiedByMeDate = modifiedByMeDate;
+    }
+
+    public String getLastViewedByMeDate() {
+        return lastViewedByMeDate;
+    }
+
+    public void setLastViewedByMeDate(String lastViewedByMeDate) {
+        this.lastViewedByMeDate = lastViewedByMeDate;
+    }
+
+    public String getMarkedViewedByMeDate() {
+        return markedViewedByMeDate;
+    }
+
+    public void setMarkedViewedByMeDate(String markedViewedByMeDate) {
+        this.markedViewedByMeDate = markedViewedByMeDate;
+    }
+
+    public String getSharedWithMeDate() {
+        return sharedWithMeDate;
+    }
+
+    public void setSharedWithMeDate(String sharedWithMeDate) {
+        this.sharedWithMeDate = sharedWithMeDate;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public SharingUser getSharingUser() {
@@ -514,68 +568,44 @@ public class GoogleDriveFileRessource {
         this.sharingUser = sharingUser;
     }
 
-    public List<Owner> getOwners() {
-        return owners;
+    public List<String> getParents() {
+        return parents;
     }
 
-    public void setOwners(List<Owner> owners) {
-        this.owners = owners;
+    public void setParents(List<String> parents) {
+        this.parents = parents;
     }
 
-    public String getTeamDriveId() {
-        return teamDriveId;
+    public String getDownloadUrl() {
+        return downloadUrl;
     }
 
-    public void setTeamDriveId(String teamDriveId) {
-        this.teamDriveId = teamDriveId;
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 
-    public LastModifyingUser getLastModifyingUser() {
-        return lastModifyingUser;
+    public ExportLinks getExportLinks() {
+        return exportLinks;
     }
 
-    public void setLastModifyingUser(LastModifyingUser lastModifyingUser) {
-        this.lastModifyingUser = lastModifyingUser;
+    public void setExportLinks(ExportLinks exportLinks) {
+        this.exportLinks = exportLinks;
     }
 
-    public String getShared() {
-        return shared;
+    public IndexableText getIndexableText() {
+        return indexableText;
     }
 
-    public void setShared(String shared) {
-        this.shared = shared;
+    public void setIndexableText(IndexableText indexableText) {
+        this.indexableText = indexableText;
     }
 
-    public String getOwnedByMe() {
-        return ownedByMe;
+    public String getUserPermission() {
+        return userPermission;
     }
 
-    public void setOwnedByMe(String ownedByMe) {
-        this.ownedByMe = ownedByMe;
-    }
-
-    public Capabilities getCapabilities() {
-        return capabilities;
-    }
-
-    public void setCapabilities(Capabilities capabilities) {
-        this.capabilities = capabilities;
-    }
-
-    public String getViewersCanCopyContent() {
-        return viewersCanCopyContent;
-    }
-
-    public void setViewersCanCopyContent(String viewersCanCopyContent) {
-        this.viewersCanCopyContent = viewersCanCopyContent;
-    }
-
-    public String getWritersCanShare() {
-        return writersCanShare;
-    }
-
-    public void setWritersCanShare(String writersCanShare) {
-        this.writersCanShare = writersCanShare;
+    public void setUserPermission(String userPermission) {
+        this.userPermission = userPermission;
     }
 
     public List<String> getPermissions() {
@@ -602,28 +632,12 @@ public class GoogleDriveFileRessource {
         this.hasAugmentedPermissions = hasAugmentedPermissions;
     }
 
-    public String getFolderColorRgb() {
-        return folderColorRgb;
-    }
-
-    public void setFolderColorRgb(String folderColorRgb) {
-        this.folderColorRgb = folderColorRgb;
-    }
-
     public String getOriginalFilename() {
         return originalFilename;
     }
 
     public void setOriginalFilename(String originalFilename) {
         this.originalFilename = originalFilename;
-    }
-
-    public String getFullFileExtension() {
-        return fullFileExtension;
-    }
-
-    public void setFullFileExtension(String fullFileExtension) {
-        this.fullFileExtension = fullFileExtension;
     }
 
     public String getFileExtension() {
@@ -634,6 +648,14 @@ public class GoogleDriveFileRessource {
         this.fileExtension = fileExtension;
     }
 
+    public String getFullFileExtension() {
+        return fullFileExtension;
+    }
+
+    public void setFullFileExtension(String fullFileExtension) {
+        this.fullFileExtension = fullFileExtension;
+    }
+
     public String getMd5Checksum() {
         return md5Checksum;
     }
@@ -642,12 +664,12 @@ public class GoogleDriveFileRessource {
         this.md5Checksum = md5Checksum;
     }
 
-    public String getSize() {
-        return size;
+    public long getFileSize() {
+        return Long.parseLong(fileSize);
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
     }
 
     public String getQuotaBytesUsed() {
@@ -658,6 +680,150 @@ public class GoogleDriveFileRessource {
         this.quotaBytesUsed = quotaBytesUsed;
     }
 
+    public List<String> getOwnerNames() {
+        return ownerNames;
+    }
+
+    public void setOwnerNames(List<String> ownerNames) {
+        this.ownerNames = ownerNames;
+    }
+
+    public List<Owner> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(List<Owner> owners) {
+        this.owners = owners;
+    }
+
+    public String getTeamDriveId() {
+        return teamDriveId;
+    }
+
+    public void setTeamDriveId(String teamDriveId) {
+        this.teamDriveId = teamDriveId;
+    }
+
+    public String getLastModifyingUserName() {
+        return lastModifyingUserName;
+    }
+
+    public void setLastModifyingUserName(String lastModifyingUserName) {
+        this.lastModifyingUserName = lastModifyingUserName;
+    }
+
+    public LastModifyingUser getLastModifyingUser() {
+        return lastModifyingUser;
+    }
+
+    public void setLastModifyingUser(LastModifyingUser lastModifyingUser) {
+        this.lastModifyingUser = lastModifyingUser;
+    }
+
+    public String getOwnedByMe() {
+        return ownedByMe;
+    }
+
+    public void setOwnedByMe(String ownedByMe) {
+        this.ownedByMe = ownedByMe;
+    }
+
+    public Capabilities getCapabilities() {
+        return capabilities;
+    }
+
+    public void setCapabilities(Capabilities capabilities) {
+        this.capabilities = capabilities;
+    }
+
+    public String getEditable() {
+        return editable;
+    }
+
+    public void setEditable(String editable) {
+        this.editable = editable;
+    }
+
+    public String getCanComment() {
+        return canComment;
+    }
+
+    public void setCanComment(String canComment) {
+        this.canComment = canComment;
+    }
+
+    public String getCanReadRevisions() {
+        return canReadRevisions;
+    }
+
+    public void setCanReadRevisions(String canReadRevisions) {
+        this.canReadRevisions = canReadRevisions;
+    }
+
+    public String getShareable() {
+        return shareable;
+    }
+
+    public void setShareable(String shareable) {
+        this.shareable = shareable;
+    }
+
+    public String getCopyable() {
+        return copyable;
+    }
+
+    public void setCopyable(String copyable) {
+        this.copyable = copyable;
+    }
+
+    public String getWritersCanShare() {
+        return writersCanShare;
+    }
+
+    public void setWritersCanShare(String writersCanShare) {
+        this.writersCanShare = writersCanShare;
+    }
+
+    public String getShared() {
+        return shared;
+    }
+
+    public void setShared(String shared) {
+        this.shared = shared;
+    }
+
+    public String getExplicitlyTrashed() {
+        return explicitlyTrashed;
+    }
+
+    public void setExplicitlyTrashed(String explicitlyTrashed) {
+        this.explicitlyTrashed = explicitlyTrashed;
+    }
+
+    public TrashingUser getTrashingUser() {
+        return trashingUser;
+    }
+
+    public void setTrashingUser(TrashingUser trashingUser) {
+        this.trashingUser = trashingUser;
+    }
+
+    public String getTrashedDate() {
+        return trashedDate;
+    }
+
+    public void setTrashedDate(String trashedDate) {
+        this.trashedDate = trashedDate;
+    }
+
+    public String getAppDataContents() {
+        return appDataContents;
+    }
+
+    public void setAppDataContents(String appDataContents) {
+        this.appDataContents = appDataContents;
+    }
+
     public String getHeadRevisionId() {
         return headRevisionId;
     }
@@ -666,12 +832,20 @@ public class GoogleDriveFileRessource {
         this.headRevisionId = headRevisionId;
     }
 
-    public ContentHints getContentHints() {
-        return contentHints;
+    public List<String> getProperties() {
+        return properties;
     }
 
-    public void setContentHints(ContentHints contentHints) {
-        this.contentHints = contentHints;
+    public void setProperties(List<String> properties) {
+        this.properties = properties;
+    }
+
+    public String getFolderColorRgb() {
+        return folderColorRgb;
+    }
+
+    public void setFolderColorRgb(String folderColorRgb) {
+        this.folderColorRgb = folderColorRgb;
     }
 
     public ImageMediaMetadata getImageMediaMetadata() {
@@ -688,6 +862,14 @@ public class GoogleDriveFileRessource {
 
     public void setVideoMediaMetadata(VideoMediaMetadata videoMediaMetadata) {
         this.videoMediaMetadata = videoMediaMetadata;
+    }
+
+    public List<String> getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(List<String> spaces) {
+        this.spaces = spaces;
     }
 
     public String getIsAppAuthorized() {

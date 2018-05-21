@@ -18,9 +18,9 @@ public class ImageMediaMetadata {
     @SerializedName("location")
     @Expose
     private Location location;
-    @SerializedName("time")
+    @SerializedName("date")
     @Expose
-    private String time;
+    private String date;
     @SerializedName("cameraMake")
     @Expose
     private String cameraMake;
@@ -88,11 +88,11 @@ public class ImageMediaMetadata {
      * @param cameraMake
      * @param exposureBias
      * @param flashUsed
+     * @param date
      * @param lens
      * @param aperture
      * @param focalLength
      * @param sensor
-     * @param time
      * @param exposureMode
      * @param height
      * @param rotation
@@ -101,13 +101,13 @@ public class ImageMediaMetadata {
      * @param meteringMode
      * @param cameraModel
      */
-    public ImageMediaMetadata(String width, String height, String rotation, Location location, String time, String cameraMake, String cameraModel, String exposureTime, String aperture, String flashUsed, String focalLength, String isoSpeed, String meteringMode, String sensor, String exposureMode, String colorSpace, String whiteBalance, String exposureBias, String maxApertureValue, String subjectDistance, String lens) {
+    public ImageMediaMetadata(String width, String height, String rotation, Location location, String date, String cameraMake, String cameraModel, String exposureTime, String aperture, String flashUsed, String focalLength, String isoSpeed, String meteringMode, String sensor, String exposureMode, String colorSpace, String whiteBalance, String exposureBias, String maxApertureValue, String subjectDistance, String lens) {
         super();
         this.width = width;
         this.height = height;
         this.rotation = rotation;
         this.location = location;
-        this.time = time;
+        this.date = date;
         this.cameraMake = cameraMake;
         this.cameraModel = cameraModel;
         this.exposureTime = exposureTime;
@@ -158,12 +158,12 @@ public class ImageMediaMetadata {
         this.location = location;
     }
 
-    public String getTime() {
-        return time;
+    public String getDate() {
+        return date;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getCameraMake() {

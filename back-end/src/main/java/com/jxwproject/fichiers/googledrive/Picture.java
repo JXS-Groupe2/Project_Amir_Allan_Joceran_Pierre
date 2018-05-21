@@ -4,34 +4,34 @@ package com.jxwproject.fichiers.googledrive;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Properties {
+public class Picture {
 
-    @SerializedName("(key)")
+    @SerializedName("url")
     @Expose
-    private String key;
+    private String url;
 
     /**
      * No args constructor for use in serialization
      * 
      */
-    public Properties() {
+    public Picture() {
     }
 
     /**
      * 
-     * @param key
+     * @param url
      */
-    public Properties(String key) {
+    public Picture(String url) {
         super();
-        this.key = key;
+        this.url = url;
     }
 
-    public String getKey() {
-        return key;
+    public String getUrl() {
+        return url;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 }

@@ -9,9 +9,9 @@ public class Capabilities {
     @SerializedName("canAddChildren")
     @Expose
     private String canAddChildren;
-    @SerializedName("canChangeViewersCanCopyContent")
+    @SerializedName("canChangeRestrictedDownload")
     @Expose
-    private String canChangeViewersCanCopyContent;
+    private String canChangeRestrictedDownload;
     @SerializedName("canComment")
     @Expose
     private String canComment;
@@ -68,9 +68,9 @@ public class Capabilities {
     /**
      * 
      * @param canRemoveChildren
+     * @param canChangeRestrictedDownload
      * @param canComment
      * @param canRename
-     * @param canChangeViewersCanCopyContent
      * @param canDelete
      * @param canMoveItemIntoTeamDrive
      * @param canMoveTeamDriveItem
@@ -85,10 +85,10 @@ public class Capabilities {
      * @param canCopy
      * @param canListChildren
      */
-    public Capabilities(String canAddChildren, String canChangeViewersCanCopyContent, String canComment, String canCopy, String canDelete, String canDownload, String canEdit, String canListChildren, String canMoveItemIntoTeamDrive, String canMoveTeamDriveItem, String canReadRevisions, String canReadTeamDrive, String canRemoveChildren, String canRename, String canShare, String canTrash, String canUntrash) {
+    public Capabilities(String canAddChildren, String canChangeRestrictedDownload, String canComment, String canCopy, String canDelete, String canDownload, String canEdit, String canListChildren, String canMoveItemIntoTeamDrive, String canMoveTeamDriveItem, String canReadRevisions, String canReadTeamDrive, String canRemoveChildren, String canRename, String canShare, String canTrash, String canUntrash) {
         super();
         this.canAddChildren = canAddChildren;
-        this.canChangeViewersCanCopyContent = canChangeViewersCanCopyContent;
+        this.canChangeRestrictedDownload = canChangeRestrictedDownload;
         this.canComment = canComment;
         this.canCopy = canCopy;
         this.canDelete = canDelete;
@@ -114,12 +114,12 @@ public class Capabilities {
         this.canAddChildren = canAddChildren;
     }
 
-    public String getCanChangeViewersCanCopyContent() {
-        return canChangeViewersCanCopyContent;
+    public String getCanChangeRestrictedDownload() {
+        return canChangeRestrictedDownload;
     }
 
-    public void setCanChangeViewersCanCopyContent(String canChangeViewersCanCopyContent) {
-        this.canChangeViewersCanCopyContent = canChangeViewersCanCopyContent;
+    public void setCanChangeRestrictedDownload(String canChangeRestrictedDownload) {
+        this.canChangeRestrictedDownload = canChangeRestrictedDownload;
     }
 
     public String getCanComment() {

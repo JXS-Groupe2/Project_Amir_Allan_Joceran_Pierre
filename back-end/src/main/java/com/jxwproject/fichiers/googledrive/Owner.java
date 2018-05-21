@@ -12,12 +12,12 @@ public class Owner {
     @SerializedName("displayName")
     @Expose
     private String displayName;
-    @SerializedName("photoLink")
+    @SerializedName("picture")
     @Expose
-    private String photoLink;
-    @SerializedName("me")
+    private Picture_ picture;
+    @SerializedName("isAuthenticatedUser")
     @Expose
-    private String me;
+    private String isAuthenticatedUser;
     @SerializedName("permissionId")
     @Expose
     private String permissionId;
@@ -34,19 +34,19 @@ public class Owner {
 
     /**
      * 
-     * @param photoLink
+     * @param picture
+     * @param isAuthenticatedUser
      * @param emailAddress
-     * @param me
      * @param permissionId
      * @param displayName
      * @param kind
      */
-    public Owner(String kind, String displayName, String photoLink, String me, String permissionId, String emailAddress) {
+    public Owner(String kind, String displayName, Picture_ picture, String isAuthenticatedUser, String permissionId, String emailAddress) {
         super();
         this.kind = kind;
         this.displayName = displayName;
-        this.photoLink = photoLink;
-        this.me = me;
+        this.picture = picture;
+        this.isAuthenticatedUser = isAuthenticatedUser;
         this.permissionId = permissionId;
         this.emailAddress = emailAddress;
     }
@@ -67,20 +67,20 @@ public class Owner {
         this.displayName = displayName;
     }
 
-    public String getPhotoLink() {
-        return photoLink;
+    public Picture_ getPicture() {
+        return picture;
     }
 
-    public void setPhotoLink(String photoLink) {
-        this.photoLink = photoLink;
+    public void setPicture(Picture_ picture) {
+        this.picture = picture;
     }
 
-    public String getMe() {
-        return me;
+    public String getIsAuthenticatedUser() {
+        return isAuthenticatedUser;
     }
 
-    public void setMe(String me) {
-        this.me = me;
+    public void setIsAuthenticatedUser(String isAuthenticatedUser) {
+        this.isAuthenticatedUser = isAuthenticatedUser;
     }
 
     public String getPermissionId() {
