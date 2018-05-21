@@ -9,6 +9,7 @@ import { GoogleApiService } from './google-api.service';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { ServicesAuthComponent } from './services-auth/services-auth.component';
+import { GoogleDriveCallbackComponent } from './google-drive-callback/google-drive-callback.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ServicesAuthComponent } from './services-auth/services-auth.component';
     AuthComponent,
     MainComponent,
     ServicesAuthComponent,
+    GoogleDriveCallbackComponent,
   ],
   imports: [
     BrowserModule,
