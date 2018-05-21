@@ -2,6 +2,11 @@ package com.jxwproject.fichiers;
 
 import java.util.AbstractMap.SimpleEntry;
 
+import org.apache.commons.io.FilenameUtils;
+
+import com.jxwproject.fichiers.dropbox.DropboxFileRessource;
+import com.jxwproject.fichiers.googledrive.GoogleDriveFileRessource;
+
 public class MetaFile {
 	private String name;
 	private SimpleEntry<String, String> origin;
@@ -60,4 +65,30 @@ public class MetaFile {
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
 	}
+	
+	public static MetaFile dropboxToMetaFile(DropboxFileRessource d) {
+		assert(d!=null);
+		MetaFile m = new MetaFile();
+		m.setName(d.getName());
+		m.setFileType(d.getFileType());
+		m.setOrigin(new SimpleEntry<String, String>("dropbox", d.getId()));
+		if(m.getFileType() == "file") {
+			m.setSize(d.getSize());
+			m.setMimeType(FilenameUtils.getExtension(d.getName()));
+		}
+		return m;
+	}
+	
+	public static MetaFile googleToMetaFile(GoogleDriveFileRessource g) {
+		assert(g!=null);
+		MetaFile m = new MetaFile();
+		m.setName(g.getName());
+		m.setFileType(g.getKind());
+		m.setOrigin(new SimpleEntry<String, String>("googledrive", g.getId()));
+		if(m.getFileType() == "file") {
+			m.setMimeType(g.getMimeType());
+		}
+		return m;
+	}
+	
 }

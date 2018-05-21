@@ -1,0 +1,19 @@
+.card-header {
+  font-weight: bold;
+}
+
+.card-block {
+  padding: 10px;
+}
+
+.element {
+  margin-bottom: 20px;
+}
+
+.element-image {
+  text-align: center;
+}
+
+.element-name {
+  text-align: center;
+}

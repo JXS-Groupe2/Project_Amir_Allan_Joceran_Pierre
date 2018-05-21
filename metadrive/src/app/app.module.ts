@@ -9,6 +9,12 @@ import { GoogleApiService } from './google-api.service';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { ServicesAuthComponent } from './services-auth/services-auth.component';
+import { GoogleDriveCallbackComponent } from './google-drive-callback/google-drive-callback.component';
+import { ExplorerComponent } from './explorer/explorer.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import { FileDetailsComponent } from './file-details/file-details.component';
+import { StorageInfoComponent } from './storage-info/storage-info.component';
+import { BackendApiService } from './backend-api.service';
 
 @NgModule({
   declarations: [
@@ -16,6 +22,11 @@ import { ServicesAuthComponent } from './services-auth/services-auth.component';
     AuthComponent,
     MainComponent,
     ServicesAuthComponent,
+    GoogleDriveCallbackComponent,
+    ExplorerComponent,
+    UserInfoComponent,
+    FileDetailsComponent,
+    StorageInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +36,8 @@ import { ServicesAuthComponent } from './services-auth/services-auth.component';
     AppRoutingModule
   ],
   providers: [
-    GoogleApiService
+    GoogleApiService,
+    BackendApiService
   ],
   bootstrap: [AppComponent]
 })
