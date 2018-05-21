@@ -34,8 +34,8 @@ public class UsersResource {
 		// TODO A MODIFIER
 		users = new ArrayList<User>();
 		
-		users.add(new User("admin"));
-		users.add(new User("user@example.com"));
+		users.add(new User("admin", "password"));
+		users.add(new User("user@example.com", "password"));
 	}
 
 	@GET
