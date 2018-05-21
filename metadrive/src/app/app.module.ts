@@ -9,6 +9,10 @@ import { GoogleApiService } from './google-api.service';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { ServicesAuthComponent } from './services-auth/services-auth.component';
+import { ExplorerComponent } from './explorer/explorer.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import { FileDetailsComponent } from './file-details/file-details.component';
+import { StorageInfoComponent } from './storage-info/storage-info.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +20,10 @@ import { ServicesAuthComponent } from './services-auth/services-auth.component';
     AuthComponent,
     MainComponent,
     ServicesAuthComponent,
+    ExplorerComponent,
+    UserInfoComponent,
+    FileDetailsComponent,
+    StorageInfoComponent,
   ],
   imports: [
     BrowserModule,
