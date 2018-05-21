@@ -5,14 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.ClientBuilder;
@@ -30,7 +26,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.jxwproject.fichiers.dropbox.DropboxFileRessource;
 import com.jxwproject.fichiers.googledrive.GoogleDriveFileRessource;
 import com.jxwproject.fichiers.googledrive.GoogleDriveFilesList;
 import com.sun.jersey.api.client.Client;
@@ -39,12 +34,13 @@ import com.sun.jersey.api.client.WebResource;
 
 public class DriveREST {
 
-	//private String token = "ya29.Glu5BX5E_CPeT78i9VQHs_VOqlHj_BVE71djvALeNL0_wAxZ8TxnFhN3y1pONdet6x7_-aGIDWwEiw7TDkpCxfyVS5JwH9o-7iufWHNheaTVwel2HxGsttbGctHP";
-	
-	public DriveREST(){
-		
+	// private String token =
+	// "ya29.Glu5BX5E_CPeT78i9VQHs_VOqlHj_BVE71djvALeNL0_wAxZ8TxnFhN3y1pONdet6x7_-aGIDWwEiw7TDkpCxfyVS5JwH9o-7iufWHNheaTVwel2HxGsttbGctHP";
+
+	public DriveREST() {
+
 	}
-	
+
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getInfos(String token) {
@@ -70,6 +66,7 @@ public class DriveREST {
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
+
 	public GoogleDriveFilesList getFilesList(String token) {
         final javax.ws.rs.client.Client client = ClientBuilder.newBuilder().build();
         final WebTarget webtarget = client.target("https://www.googleapis.com").path("drive/v3/files");
@@ -90,14 +87,14 @@ public class DriveREST {
 		return gdfrList;
 
 	}
-	
+
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String fileInfo(String token, final String file) {
+	public GoogleDriveFileRessource fileInfo(String token, final String file) {
 
-		System.out.println(file);
+		//System.out.println(file);
 		Client client = Client.create();
-		WebResource webResource = client.resource("https://www.googleapis.com/drive/v2/files").path(file);
+		WebResource webResource = client.resource("https://www.googleapis.com/drive/v3/files").path(file);
 
 		ClientResponse response = null;
 		response = webResource.header("Content-Type", "application/json;charset=UTF-8")
@@ -107,15 +104,16 @@ public class DriveREST {
 
 		if (response.getStatus() != 200) {
 			System.err.println(response.getStatus());
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			return null;
 		}
 		String output = response.getEntity(String.class);
+		Gson gson = new Gson();
+		GoogleDriveFileRessource fileressource =gson.fromJson(output, GoogleDriveFileRessource.class);
+		return fileressource;
 
-		
-		return output;
 
 	}
-	
+
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String fileParent(final String token, final String file) {
@@ -123,7 +121,7 @@ public class DriveREST {
 		return fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
 
 	}
-	
+
 	@GET
 	public String[] fileChildren(String token/*, final String folder*/) {
 
@@ -141,13 +139,14 @@ public class DriveREST {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}
 		JsonParser parser = new JsonParser();
-		JsonArray jsonresponse = parser.parse(response.getEntity(String.class)).getAsJsonObject().get("items").getAsJsonArray();
-		
-		String []result = new String[jsonresponse.size()];
-		for (int i =0; i<jsonresponse.size();i++){
-			result[i]=jsonresponse.get(i).getAsJsonObject().get("id").getAsString();
+		JsonArray jsonresponse = parser.parse(response.getEntity(String.class)).getAsJsonObject().get("items")
+				.getAsJsonArray();
+
+		String[] result = new String[jsonresponse.size()];
+		for (int i = 0; i < jsonresponse.size(); i++) {
+			result[i] = jsonresponse.get(i).getAsJsonObject().get("id").getAsString();
 		}
-			
+
 
 		return result;
 
@@ -186,10 +185,8 @@ public class DriveREST {
 				}
 			}
 		};
-		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM)
-				.header("Access-Control-Allow-Origin", "*")
-				.header("content-disposition", "attachment; filename = " + fileAttributs(token, file, "title").getAsString()).build();
-
+		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition",
+				"attachment; filename = " + fileAttributs(token, file, "title").getAsString()).build();
 	}
 
 	@GET
@@ -222,10 +219,8 @@ public class DriveREST {
 				}
 			}
 		};
-		
-		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM)
-                .header("Access-Control-Allow-Origin", "*")
-				.header("content-disposition", "attachment; filename = "+fileAttributs(token, file, "title").getAsString()+".pdf").build();
+		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition",
+				"attachment; filename = " + fileAttributs(token, file, "title").getAsString() + ".pdf").build();
 
 	}
 
@@ -249,32 +244,53 @@ public class DriveREST {
 		return output;
 	}
 
-	
 	@GET
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(@FormDataParam("file") InputStream uploadedInputSteam,
-			@FormDataParam("file") FormDataContentDisposition fileDetail){
-		
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+
 		String uploadedFileLocation = "e://upload/" + fileDetail.getFileName();
 		writeToFile(uploadedInputSteam, uploadedFileLocation);
-		
+
 		String output = "File uploaded to : " + uploadedFileLocation;
 		return Response.status(200).entity(output).build();
-	
-//		Client client = Client.create();
-//		WebResource webResource = client.resource("https://www.googleapis.com/upload/drive/v3/files?uploadType=media");
-//
-//		ClientResponse response = response = webResource.header("Content-Type", "")
-//				.header("Authorization", "Bearer " + token).delete(ClientResponse.class);
-//
-//		return null;
+
+		// Client client = Client.create();
+		// WebResource webResource =
+		// client.resource("https://www.googleapis.com/upload/drive/v3/files?uploadType=media");
+		//
+		// ClientResponse response = response =
+		// webResource.header("Content-Type", "")
+		// .header("Authorization", "Bearer " +
+		// token).delete(ClientResponse.class);
+		//
+		// return null;
 
 	}
-	
-
 
 	// ************************ internal methods ************************
-
+	
+	
+	public String filePath(String file, String token){
+		StringBuilder path = new StringBuilder();
+		path.append(fileAttributs(token, file, "title").getAsString());
+		while(true){
+			if (fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("isRoot").getAsBoolean()){
+				path.append("/",0,0);
+				break;
+			}else{
+				
+				file = fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
+				path.append(fileAttributs(token, file, "title").getAsString(),0,0);
+				
+			}	
+			
+		}
+		
+		
+		return path.toString();
+	}
+	
 
 	public JsonElement fileAttributs(final String token, final String file, final String att) {
 
@@ -295,26 +311,23 @@ public class DriveREST {
 		return output.get(att);
 	}
 
-	
-	private void writeToFile(InputStream uploadedInputStream,
-			String uploadedFileLocation) {
+	private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) {
 
-			try {
-				OutputStream out = new FileOutputStream(new File(
-						uploadedFileLocation));
-				int read = 0;
-				byte[] bytes = new byte[1024];
+		try {
+			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
+			int read = 0;
+			byte[] bytes = new byte[1024];
 
-				out = new FileOutputStream(new File(uploadedFileLocation));
-				while ((read = uploadedInputStream.read(bytes)) != -1) {
-					out.write(bytes, 0, read);
-				}
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-
-				e.printStackTrace();
+			out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = uploadedInputStream.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
 			}
+			out.flush();
+			out.close();
+		} catch (IOException e) {
 
+			e.printStackTrace();
 		}
+
+	}
 }
