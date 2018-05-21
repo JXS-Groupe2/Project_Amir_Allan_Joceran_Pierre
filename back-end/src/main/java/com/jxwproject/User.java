@@ -2,12 +2,37 @@ package com.jxwproject;
 
 public class User {
 	private String email;
-	private String password;
+	private String googleToken,dropboxToken;
 
-	public User(String email, String password) {
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getGoogleToken() {
+		return googleToken;
+	}
+
+	public void setGoogleToken(String googleToken) {
+		this.googleToken = googleToken;
+	}
+
+	public String getDropboxToken() {
+		return dropboxToken;
+	}
+
+	public void setDropboxToken(String dropboxToken) {
+		this.dropboxToken = dropboxToken;
+	}
+
+	public User(String email) {
 
 		this.email=email;
-		this.password=password;
 	}
+
+	
 
 }
