@@ -1,6 +1,9 @@
 package com.jxwproject;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
+	
 	private String email;
 	private String googleToken,dropboxToken;
 
