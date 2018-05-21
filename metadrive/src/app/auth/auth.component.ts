@@ -32,13 +32,15 @@ export class AuthComponent implements OnInit {
         email: value["email"],
         password: value["password"]
       }
-      var res = this.backend.logInUser(credentials);
-      if (res != "error") {
-        localStorage.setItem("userId", res);
-        this.router.navigate(["/metadrive"]);
-      } else {
-        this.areCredentialsIncorrect = true;
-      }
+
+      this.backend.logInUser(credentials).subscribe(resp => {
+        if (resp.status == 200) {
+          localStorage.setItem("userEmail", resp.body.toString());
+          this.router.navigate(["/metadrive"]);
+        } else {
+          this.areCredentialsIncorrect = true;
+        }
+      });
     }
   }
 
