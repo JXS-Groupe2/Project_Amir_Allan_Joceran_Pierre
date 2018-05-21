@@ -13,6 +13,7 @@ import { ExplorerComponent } from './explorer/explorer.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { FileDetailsComponent } from './file-details/file-details.component';
 import { StorageInfoComponent } from './storage-info/storage-info.component';
+import { BackendApiService } from './backend-api.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { StorageInfoComponent } from './storage-info/storage-info.component';
     AppRoutingModule
   ],
   providers: [
-    GoogleApiService
+    GoogleApiService,
+    BackendApiService
   ],
   bootstrap: [AppComponent]
 })
