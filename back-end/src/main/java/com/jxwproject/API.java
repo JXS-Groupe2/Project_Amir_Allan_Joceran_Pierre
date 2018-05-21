@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -51,7 +52,7 @@ public class API {
 		this.user = user;
 	}
 
-
+	
 
 	/**
      * Méthode permettant de renvoyer la liste de tous les 
@@ -76,14 +77,7 @@ public class API {
     		System.out.println("Nombre de fichiers Dropbox récupérés : "+dfr.size());
     		MetaFile m = null;
     		for(DropboxFileRessource d : dfr) {
-    			m = new MetaFile();
-    			m.setName(d.getName());
-    			m.setFileType(d.getFileType());
-    			m.setOrigin(new SimpleEntry<String, String>("dropbox", d.getId()));
-    			if(m.getFileType() == "file") {
-    				m.setSize(d.getSize());
-    				m.setMimeType(FilenameUtils.getExtension(d.getName()));
-    			}
+    			m = MetaFile.dropboxToMetaFile(d);
     			mf.add(m);
     		}
     		
@@ -99,18 +93,58 @@ public class API {
     		MetaFile m = null;
     		GoogleDriveFileRessource[] files = gdfr.getFiles();
     		for(int i = 0; i < files.length; i++) {
-    			m = new MetaFile();
-    			m.setName(files[i].getName());
-    			m.setFileType(files[i].getKind());
-    			m.setOrigin(new SimpleEntry<String, String>("googledrive", files[i].getId()));
-    			if(m.getFileType() == "file") {
-    				m.setMimeType(files[i].getMimeType());
-    			}
+    			m = MetaFile.googleToMetaFile(files[i]);
     			mf.add(m);
     		}
     	}
     	
     	//Sending as JSON String
     	return gson.toJson(mf);
+    }
+    
+    /**
+     * Suppression d'un fichier dans le dossier courant, renvoie le dossier courant
+     * @param filePath
+     * @return
+     * @throws FileNotFoundException 
+     * @throws JsonIOException 
+     * @throws JsonSyntaxException 
+     */
+    @GET
+    @Path("{file}/remove")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String delete(@PathParam("filePath") final String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		
+    	
+    	
+    	
+    	return listFiles();
+    	
+    }
+    
+    /**
+     * Créer un fichier dans le dossier courant, renvoie le contenu du dossier courant
+     * @param filePath
+     * @return
+     * @throws FileNotFoundException 
+     * @throws JsonIOException 
+     * @throws JsonSyntaxException 
+     */
+    @GET
+    @Path("{fileName}/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String create(@PathParam("fileName") final String fileName) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		
+    	List<MetaFile> meta = new ArrayList<MetaFile>();
+    	DropboxFileRessource dropboxRes = null;
+    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
+    		dropboxRes = dropbox.createFile(user.getDropboxToken(), fileName);		
+    	}
+    	meta.add(MetaFile.dropboxToMetaFile(dropboxRes));
+    	
+    	Gson gson = new Gson();
+    	
+    	return gson.toJson(meta);
+    	
     }
 }

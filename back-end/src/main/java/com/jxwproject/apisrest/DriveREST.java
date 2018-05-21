@@ -55,7 +55,9 @@ public class DriveREST {
 
 		ClientResponse response = null;
 		response = webResource.header("Content-Type", "application/json;charset=UTF-8")
-				.header("Authorization", "Bearer " + token).get(ClientResponse.class);
+				.header("Authorization", "Bearer " + token)
+                .header("Access-Control-Allow-Origin", "*")
+				.get(ClientResponse.class);
 
 		if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
@@ -78,6 +80,7 @@ public class DriveREST {
 				.queryParam("q", "%27root%27%20in%20parents")
                 .request(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
+                .header("Access-Control-Allow-Origin", "*")
                 .get(String.class);
 		
 		Gson gson = new Gson();
@@ -98,7 +101,9 @@ public class DriveREST {
 
 		ClientResponse response = null;
 		response = webResource.header("Content-Type", "application/json;charset=UTF-8")
-				.header("Authorization", "Bearer " + token).get(ClientResponse.class);
+				.header("Authorization", "Bearer " + token)
+                .header("Access-Control-Allow-Origin", "*")
+				.get(ClientResponse.class);
 
 		if (response.getStatus() != 200) {
 			System.err.println(response.getStatus());
@@ -127,7 +132,9 @@ public class DriveREST {
 
 		ClientResponse response = null;
 		response = webResource.header("Content-Type", "application/json;charset=UTF-8")
-				.header("Authorization", "Bearer " + token).get(ClientResponse.class);
+				.header("Authorization", "Bearer " + token)
+                .header("Access-Control-Allow-Origin", "*")
+				.get(ClientResponse.class);
 
 		if (response.getStatus() != 200) {
 			System.err.println(response.getStatus());
@@ -160,7 +167,9 @@ public class DriveREST {
 
 					ClientResponse response = null;
 					response = webResource.header("Content-Type", "application/json;charset=UTF-8")
-							.header("Authorization", "Bearer " + token).get(ClientResponse.class);
+							.header("Authorization", "Bearer " + token)
+			                .header("Access-Control-Allow-Origin", "*")
+							.get(ClientResponse.class);
 
 					if (response.getStatus() != 200) {
 						System.out.println(response.getStatus());
@@ -178,6 +187,7 @@ public class DriveREST {
 			}
 		};
 		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM)
+				.header("Access-Control-Allow-Origin", "*")
 				.header("content-disposition", "attachment; filename = " + fileAttributs(token, file, "title").getAsString()).build();
 
 	}
@@ -195,7 +205,9 @@ public class DriveREST {
 
 					ClientResponse response = null;
 					response = webResource.header("Content-Type", "application/json;charset=UTF-8")
-							.header("Authorization", "Bearer " + token).get(ClientResponse.class);
+							.header("Authorization", "Bearer " + token)
+			                .header("Access-Control-Allow-Origin", "*")
+							.get(ClientResponse.class);
 
 					if (response.getStatus() != 200) {
 						throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
@@ -212,6 +224,7 @@ public class DriveREST {
 		};
 		
 		return Response.ok(fileStream, MediaType.APPLICATION_OCTET_STREAM)
+                .header("Access-Control-Allow-Origin", "*")
 				.header("content-disposition", "attachment; filename = "+fileAttributs(token, file, "title").getAsString()+".pdf").build();
 
 	}
@@ -224,6 +237,7 @@ public class DriveREST {
 
 		ClientResponse response = null;
 		response = webResource.header("Content-Type", "application/json;charset=UTF-8")
+                .header("Access-Control-Allow-Origin", "*")
 				.header("Authorization", "Bearer " + token).delete(ClientResponse.class);
 
 		if (response.getStatus() % 100 != 2) {
