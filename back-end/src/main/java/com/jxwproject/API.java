@@ -24,6 +24,7 @@ import com.jxwproject.apisrest.DropboxREST;
 import com.jxwproject.fichiers.MetaFile;
 import com.jxwproject.fichiers.dropbox.DropboxFileRessource;
 import com.jxwproject.fichiers.googledrive.GoogleDriveFileRessource;
+import com.jxwproject.fichiers.googledrive.GoogleDriveFilesList;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -55,73 +56,82 @@ public class API {
 		this.user = user;
 	}
 
-	/**
-	 * Méthode permettant de renvoyer la liste de tous les
-	 *
-	 * @return String that will be returned as a text/plain response.
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listFiles(/* String path */) {
-		List<GoogleDriveFileRessource> gdfr;
-		List<DropboxFileRessource> dfr;
-
-		List<MetaFile> mf = new ArrayList<MetaFile>();
-
-		// Deuxième condition pour le compte dev
-		/*
-		 * if((user.getGoogleToken() != null) || (user.getGoogleToken() != ""))
-		 * { System.out.println("Récupération des fichiers Google Drive !");
-		 * gdfr = DriveREST.getFilesList(user.getGoogleToken()); MetaFile m =
-		 * null; int i = 0; for(GoogleDriveFileRessource g : gdfr) { m = new
-		 * MetaFile(); m.setName(g.getTitle()); m.setFileType(g.getKind());
-		 * m.setOrigin(new SimpleEntry<String, String>("googledrive",
-		 * g.getId())); if(m.getFileType() == "file") {
-		 * m.setSize(g.getFileSize()); m.setMimeType(g.getMimeType()); } i++; }
-		 * System.out.println("Nombre de fichiers Google Drive récupérés : "+i);
-		 * mf.add(m); }
-		 */
-
-		if (user.getDropboxToken() != null) {
-			System.out.println("Récupération des fichiers Dropbox !");
-			dfr = dropbox.getContent(user.getDropboxToken());
-			System.out.println("Nombre de fichiers Dropbox récupérés : " + dfr.size());
-			MetaFile m = null;
-			for (DropboxFileRessource d : dfr) {
-				m = new MetaFile();
-				m.setName(d.getName());
-				m.setFileType(d.getFileType());
-				m.setOrigin(new SimpleEntry<String, String>("dropbox", d.getId()));
-				if (m.getFileType() == "file") {
-					m.setSize(d.getSize());
-					m.setMimeType(FilenameUtils.getExtension(d.getName()));
-				}
-				mf.add(m);
-			}
-
-		}
-
-		// Sending as JSON String
-		Gson gson = new Gson();
-		return gson.toJson(mf);
-	}
-
 	@GET
 	@Path("/{file}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public MetaFile fileInfo(@PathParam("file") String file) {
 
 		if (user.getGoogleToken() != null) {
-			
+
 			GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), file);
-			
-			System.out.println(info.getTitle());
-			MetaFile metafile = new MetaFile(info.getTitle(), new SimpleEntry<String, String>("google", info.getId()),
-					info.getKind(), 0, info.getMimeType() );
+
+			System.out.println(info.getName());
+			MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
+					info.getKind(), 0, info.getMimeType());
 			return metafile;
 		}
 
 		return null;
 	}
 
+	/**
+     * Méthode permettant de renvoyer la liste de tous les 
+     *
+     * @return String that will be returned as a text/plain response.
+	 * @throws FileNotFoundException 
+	 * @throws JsonIOException 
+	 * @throws JsonSyntaxException 
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listFileses(/*String path*/) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+    	GoogleDriveFilesList gdfr;
+    	List<DropboxFileRessource> dfr;
+    	Gson gson = new Gson();
+    	List<MetaFile> mf = new ArrayList<MetaFile>();
+    	
+    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != ""))
+    	{
+    		System.out.println("Récupération des fichiers Dropbox !");
+    		dfr = dropbox.getContent(user.getDropboxToken());
+    		System.out.println("Nombre de fichiers Dropbox récupérés : "+dfr.size());
+    		MetaFile m = null;
+    		for(DropboxFileRessource d : dfr) {
+    			m = new MetaFile();
+    			m.setName(d.getName());
+    			m.setFileType(d.getFileType());
+    			m.setOrigin(new SimpleEntry<String, String>("dropbox", d.getId()));
+    			if(m.getFileType() == "file") {
+    				m.setSize(d.getSize());
+    				m.setMimeType(FilenameUtils.getExtension(d.getName()));
+    			}
+    			mf.add(m);
+    		}
+    		
+    	}
+    	
+    	//Deuxième condition pour le compte dev
+    	if((user.getGoogleToken() != null) || (user.getGoogleToken() != ""))
+    	{
+    		System.out.println("Récupération des fichiers Google Drive !");
+    		gdfr = drive.getFilesList(user.getGoogleToken());
+    		//gdfr = gson.fromJson(new FileReader("reponse.json"), GoogleDriveFilesList.class);
+    		System.out.println("Nombre de fichiers Drive récupérés : "+gdfr.getFiles().length);
+    		MetaFile m = null;
+    		GoogleDriveFileRessource[] files = gdfr.getFiles();
+    		for(int i = 0; i < files.length; i++) {
+    			m = new MetaFile();
+    			m.setName(files[i].getName());
+    			m.setFileType(files[i].getKind());
+    			m.setOrigin(new SimpleEntry<String, String>("googledrive", files[i].getId()));
+    			if(m.getFileType() == "file") {
+    				m.setMimeType(files[i].getMimeType());
+    			}
+    			mf.add(m);
+    		}
+    	}
+    	
+    	//Sending as JSON String
+    	return gson.toJson(mf);
+    }
 }

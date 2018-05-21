@@ -9,9 +9,9 @@ public class Capabilities {
     @SerializedName("canAddChildren")
     @Expose
     private String canAddChildren;
-    @SerializedName("canChangeRestrictedDownload")
+    @SerializedName("canChangeViewersCanCopyContent")
     @Expose
-    private String canChangeRestrictedDownload;
+    private String canChangeViewersCanCopyContent;
     @SerializedName("canComment")
     @Expose
     private String canComment;
@@ -58,54 +58,6 @@ public class Capabilities {
     @Expose
     private String canUntrash;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public Capabilities() {
-    }
-
-    /**
-     * 
-     * @param canRemoveChildren
-     * @param canChangeRestrictedDownload
-     * @param canComment
-     * @param canRename
-     * @param canDelete
-     * @param canMoveItemIntoTeamDrive
-     * @param canMoveTeamDriveItem
-     * @param canUntrash
-     * @param canEdit
-     * @param canTrash
-     * @param canReadRevisions
-     * @param canAddChildren
-     * @param canDownload
-     * @param canReadTeamDrive
-     * @param canShare
-     * @param canCopy
-     * @param canListChildren
-     */
-    public Capabilities(String canAddChildren, String canChangeRestrictedDownload, String canComment, String canCopy, String canDelete, String canDownload, String canEdit, String canListChildren, String canMoveItemIntoTeamDrive, String canMoveTeamDriveItem, String canReadRevisions, String canReadTeamDrive, String canRemoveChildren, String canRename, String canShare, String canTrash, String canUntrash) {
-        super();
-        this.canAddChildren = canAddChildren;
-        this.canChangeRestrictedDownload = canChangeRestrictedDownload;
-        this.canComment = canComment;
-        this.canCopy = canCopy;
-        this.canDelete = canDelete;
-        this.canDownload = canDownload;
-        this.canEdit = canEdit;
-        this.canListChildren = canListChildren;
-        this.canMoveItemIntoTeamDrive = canMoveItemIntoTeamDrive;
-        this.canMoveTeamDriveItem = canMoveTeamDriveItem;
-        this.canReadRevisions = canReadRevisions;
-        this.canReadTeamDrive = canReadTeamDrive;
-        this.canRemoveChildren = canRemoveChildren;
-        this.canRename = canRename;
-        this.canShare = canShare;
-        this.canTrash = canTrash;
-        this.canUntrash = canUntrash;
-    }
-
     public String getCanAddChildren() {
         return canAddChildren;
     }
@@ -114,12 +66,12 @@ public class Capabilities {
         this.canAddChildren = canAddChildren;
     }
 
-    public String getCanChangeRestrictedDownload() {
-        return canChangeRestrictedDownload;
+    public String getCanChangeViewersCanCopyContent() {
+        return canChangeViewersCanCopyContent;
     }
 
-    public void setCanChangeRestrictedDownload(String canChangeRestrictedDownload) {
-        this.canChangeRestrictedDownload = canChangeRestrictedDownload;
+    public void setCanChangeViewersCanCopyContent(String canChangeViewersCanCopyContent) {
+        this.canChangeViewersCanCopyContent = canChangeViewersCanCopyContent;
     }
 
     public String getCanComment() {
