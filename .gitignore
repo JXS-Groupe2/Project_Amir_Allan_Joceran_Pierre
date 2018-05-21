@@ -130,3 +130,5 @@ Desktop.ini
 $RECYCLE.BIN/
 /.metadata/
 back-end/src/main/webapp/uploadTest.html
+#temp file
+users.tmp
