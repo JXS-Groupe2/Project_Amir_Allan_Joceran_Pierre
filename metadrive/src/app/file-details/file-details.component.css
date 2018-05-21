@@ -4,15 +4,10 @@
 }
 
 .card-block {
-  text-align: center;
   padding: 5px;
 }
 
-.service-button {
-  width: 100px;
+#filename {
   font-weight: bold;
-}
-
-.row + .row {
-  margin-top: 5px;
+  margin-bottom: 10px;
 }
