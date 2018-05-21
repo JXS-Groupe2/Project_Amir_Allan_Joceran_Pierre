@@ -36,11 +36,11 @@ import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.jxwproject.fichiers.DropboxFileRessource;
-import com.jxwproject.fichiers.DropboxMetadataDeserializer;
+import com.jxwproject.fichiers.dropbox.DropboxFileRessource;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -119,12 +119,12 @@ public class DropboxREST{
 			}
 
 			String output = response.readEntity(String.class);
-			JsonParser parser = new JsonParser();
-			JsonObject json = parser.parse(output).getAsJsonObject();
 			
-			DropboxFileRessource dpf = DropboxMetadataDeserializer.deserialize(json);
-
-			String textoutput = "nom : "+dpf.getName() + " | id : "+dpf.getId() + " | path : "+ dpf.getPath() +"| type : "+dpf.getFileType();
+			Gson gson = new Gson();
+			
+			DropboxFileRessource dpf = gson.fromJson(output, DropboxFileRessource.class);
+			
+			String textoutput = "nom : "+dpf.getName() + " | id : "+dpf.getId() + " | path : "+ dpf.getPathLower() +"| type : "+dpf.getFileType();
 			return textoutput;
 	  } catch (Exception e) {
 		    e.printStackTrace();
