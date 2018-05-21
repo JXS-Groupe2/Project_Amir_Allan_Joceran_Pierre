@@ -58,7 +58,6 @@ public class API {
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    @Path("listFiles")
     @Produces(MediaType.APPLICATION_JSON)
     public String listFiles(/*String path*/) {
     	List<GoogleDriveFileRessource> gdfr;
