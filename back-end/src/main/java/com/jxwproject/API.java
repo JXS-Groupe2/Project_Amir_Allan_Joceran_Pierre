@@ -1,8 +1,9 @@
 package com.jxwproject;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -13,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.io.FilenameUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.jxwproject.apisrest.DriveREST;
 import com.jxwproject.apisrest.DropboxREST;
 import com.jxwproject.fichiers.MetaFile;
@@ -26,9 +29,17 @@ import com.jxwproject.fichiers.googledrive.GoogleDriveFileRessource;
 public class API {
 	
 	private User user;
+	private DropboxREST dropbox;
+	private DriveREST drive;
 	
-	public API(User user) {
-		this.setUser(user);
+	public API() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		this.user = new Gson().fromJson(new FileReader("comptedev.json"), User.class);
+		System.out.println("Dropbox Token : "+user.getDropboxToken());
+		System.out.println("Google Token : "+user.getGoogleToken());
+		
+		dropbox = new DropboxREST();
+		drive = new DriveREST();
+		
 	}
 	
     public User getUser() {
@@ -47,20 +58,22 @@ public class API {
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String listFiles(String path) {
+    @Path("listFiles")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listFiles(/*String path*/) {
     	List<GoogleDriveFileRessource> gdfr;
     	List<DropboxFileRessource> dfr;
     	
     	List<MetaFile> mf = new ArrayList<MetaFile>();
     	
-    	if(user.getGoogleToken() != null)
+    	//Deuxième condition pour le compte dev
+    	/*if((user.getGoogleToken() != null) || (user.getGoogleToken() != ""))
     	{
+    		System.out.println("Récupération des fichiers Google Drive !");
     		gdfr = DriveREST.getFilesList(user.getGoogleToken());
-    		Iterator<GoogleDriveFileRessource> it = gdfr.listIterator();
     		MetaFile m = null;
-    		while(it.hasNext()) {
-    			GoogleDriveFileRessource g = it.next();
+    		int i = 0;
+    		for(GoogleDriveFileRessource g : gdfr) {
     			m = new MetaFile();
     			m.setName(g.getTitle());
     			m.setFileType(g.getKind());
@@ -69,17 +82,19 @@ public class API {
     				m.setSize(g.getFileSize());
     				m.setMimeType(g.getMimeType());
     			}
+    			i++;
     		}
+    		System.out.println("Nombre de fichiers Google Drive récupérés : "+i);
     		mf.add(m);
-    	}
+    	}*/
     	
     	if (user.getDropboxToken() != null)
     	{
-    		dfr = DropboxREST.getContent(user.getDropboxToken());
-    		Iterator<DropboxFileRessource> it = dfr.listIterator();
+    		System.out.println("Récupération des fichiers Dropbox !");
+    		dfr = dropbox.getContent(user.getDropboxToken());
+    		System.out.println("Nombre de fichiers Dropbox récupérés : "+dfr.size());
     		MetaFile m = null;
-    		while(it.hasNext()) {
-    			DropboxFileRessource d = it.next();
+    		for(DropboxFileRessource d : dfr) {
     			m = new MetaFile();
     			m.setName(d.getName());
     			m.setFileType(d.getFileType());
@@ -88,8 +103,9 @@ public class API {
     				m.setSize(d.getSize());
     				m.setMimeType(FilenameUtils.getExtension(d.getName()));
     			}
+    			mf.add(m);
     		}
-    		mf.add(m);
+    		
     	}
     	
     	//Sending as JSON String

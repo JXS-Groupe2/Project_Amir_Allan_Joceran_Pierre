@@ -31,6 +31,10 @@ public class DropboxREST{
 	//Token de test : à changer tout le temps
 	//private final static String token = "G7zoVR0rS5oAAAAAAAAN9tmXZyESnMYUsTRFCKwwo58DxBTRT1DN2cM6BhGrXlzz";
 	
+	public DropboxREST() {
+		
+	}
+	
 	
 	/** Get account info
 	 * 
@@ -39,7 +43,7 @@ public class DropboxREST{
 	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public static String getUserAccountInfos(String token) {
+	public String getUserAccountInfos(String token) {
 			Client client = Client.create();
 			WebResource webRessource = client.resource("https://api.dropboxapi.com/2/users/get_current_account");
 			
@@ -127,8 +131,7 @@ public class DropboxREST{
 	 * 
 	 * @return JSON File of the content of the folder
 	 */
-	@GET
-	public static List<DropboxFileRessource> getContent(String token) {
+	public List<DropboxFileRessource> getContent(String token) {
 
 		final String params = "\r\n{\r\n\"path\" : \"\", \r\n\"recursive\": false,\"include_media_info\": false,\r\n\"include_deleted\": false,\r\n\"include_has_explicit_shared_members\": false,\r\n\"include_mounted_folders\": true}";
 		
@@ -148,18 +151,27 @@ public class DropboxREST{
 		}
 
 		String output = response.readEntity(String.class);
-		
 		Gson gson = new Gson();
 		List<DropboxFileRessource> dfrList = new ArrayList<DropboxFileRessource>();
 		JsonParser parser = new JsonParser();
 		
+		System.out.println("-------------------");
+		System.out.println("Transformation du string en tableau de DropboxFileRessources");
 		JsonObject root = parser.parse(output).getAsJsonObject();
-		JsonArray fileList = root.getAsJsonArray("entities");
+		System.out.println(root.toString());
+		JsonArray fileList = root.getAsJsonArray("entries");
 		DropboxFileRessource dfr;
+		
+		System.out.println(fileList.toString());
+		System.out.println("Debut du parcours");
 		for (JsonElement file : fileList) {
+			System.out.println("Nouveau fichier en plus");
 		    dfr = gson.fromJson(file, DropboxFileRessource.class);
+		    System.out.println("Nom : "+ dfr.getName());
 		    dfrList.add(dfr);
 		}
+		
+		System.out.println("Renvoi de la list");
 		return dfrList;
 	}
 	
@@ -169,8 +181,7 @@ public class DropboxREST{
 	 * 
 	 * @return JSON File of the content of the folder
 	 */
-	@GET
-	public static List<DropboxFileRessource> getContent(String token, String path) {
+	public List<DropboxFileRessource> getContent(String token, String path) {
 		String finalPath;
 		finalPath = "/"+path;
 		

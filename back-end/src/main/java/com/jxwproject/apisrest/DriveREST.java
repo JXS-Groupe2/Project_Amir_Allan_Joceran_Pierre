@@ -38,7 +38,9 @@ public class DriveREST {
 
 	//private String token = "ya29.Glu5BX5E_CPeT78i9VQHs_VOqlHj_BVE71djvALeNL0_wAxZ8TxnFhN3y1pONdet6x7_-aGIDWwEiw7TDkpCxfyVS5JwH9o-7iufWHNheaTVwel2HxGsttbGctHP";
 	
-	
+	public DriveREST(){
+		
+	}
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
