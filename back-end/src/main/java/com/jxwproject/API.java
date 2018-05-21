@@ -70,6 +70,8 @@ public class API {
     	Gson gson = new Gson();
     	List<MetaFile> mf = new ArrayList<MetaFile>();
     	
+    	//Deuxième condition pour le compte dev
+    	// TODO : supprimer ça une fois les connexions réglés
     	if((user.getDropboxToken() != null) || (user.getDropboxToken() != ""))
     	{
     		System.out.println("Récupération des fichiers Dropbox !");
@@ -84,6 +86,7 @@ public class API {
     	}
     	
     	//Deuxième condition pour le compte dev
+    	// TODO : supprimer ça une fois les connexions réglés
     	if((user.getGoogleToken() != null) || (user.getGoogleToken() != ""))
     	{
     		System.out.println("Récupération des fichiers Google Drive !");
@@ -103,42 +106,48 @@ public class API {
     }
     
     /**
-     * Suppression d'un fichier dans le dossier courant, renvoie le dossier courant
+     * Suppression d'un fichier dans le dossier courant
      * @param filePath
-     * @return
+     * @return le metadata du fichier supprimé
      * @throws FileNotFoundException 
      * @throws JsonIOException 
      * @throws JsonSyntaxException 
      */
     @GET
-    @Path("{file}/remove")
+    @Path("{filePath}/remove")
     @Produces(MediaType.APPLICATION_JSON)
     public String delete(@PathParam("filePath") final String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		
+
+    	List<MetaFile> meta = new ArrayList<MetaFile>();
+    	DropboxFileRessource dropboxRes = null;
+    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
+    		dropboxRes = dropbox.removeFile(user.getDropboxToken(), filePath);		
+    	}
+    	meta.add(MetaFile.dropboxToMetaFile(dropboxRes));
     	
+    	Gson gson = new Gson();
     	
-    	
-    	return listFiles();
+    	return gson.toJson(meta);
     	
     }
     
     /**
-     * Créer un fichier dans le dossier courant, renvoie le contenu du dossier courant
+     * Créer un fichier dans le dossier courant
      * @param filePath
-     * @return
+     * @return le metadata du fichier supprimé
      * @throws FileNotFoundException 
      * @throws JsonIOException 
      * @throws JsonSyntaxException 
      */
     @GET
-    @Path("{fileName}/create")
+    @Path("{filePath}/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public String create(@PathParam("fileName") final String fileName) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+    public String create(@PathParam("filePath") final String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		
     	List<MetaFile> meta = new ArrayList<MetaFile>();
     	DropboxFileRessource dropboxRes = null;
     	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
-    		dropboxRes = dropbox.createFile(user.getDropboxToken(), fileName);		
+    		dropboxRes = dropbox.createFile(user.getDropboxToken(), filePath);		
     	}
     	meta.add(MetaFile.dropboxToMetaFile(dropboxRes));
     	

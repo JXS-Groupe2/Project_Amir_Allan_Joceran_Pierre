@@ -32,8 +32,9 @@ public class UsersResource {
 			System.out.println("new file");
 		}
 		*/
-		// A MODIFIER
+		// TODO A MODIFIER
 		users = new ArrayList<User>();
+		
 		users.add(new User("admin"));
 		users.add(new User("user@example.com"));
 	}
