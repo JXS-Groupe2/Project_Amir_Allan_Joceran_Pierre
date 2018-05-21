@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,11 +14,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import javassist.compiler.SyntaxError;
-
 @Path("users")
 public class UsersResource {
-	private ArrayList<User> users;
+	public static ArrayList<User> users;
 
 	public UsersResource() {
 		/*
@@ -26,7 +25,7 @@ public class UsersResource {
 			ObjectInputStream stream = new ObjectInputStream(file);
 			users = (ArrayList<User>) stream.readObject();
 			stream.close();
-			//System.out.println("uploaded"+users.size());
+			// System.out.println("uploaded"+users.size());
 		} catch (Exception e) {
 			users = new ArrayList<User>();
 			System.out.println("new file");
@@ -40,11 +39,15 @@ public class UsersResource {
 
 	@GET
 	@Path("/user")
-	public String getuserid(@QueryParam("email") final String email) {
+	public String getuserid(@QueryParam("email") final String email, @QueryParam("password") final String password) {
 		for (User user : users) {
 			if (user.getEmail().equals(email)) {
-
-				return String.valueOf(users.indexOf(user));
+				if (user.getPassword().equals(password)) {
+					String uniqueID = UUID.randomUUID().toString();
+					user.setId(uniqueID);
+					save();
+					return uniqueID;
+				}
 			}
 		}
 		return null;
@@ -53,14 +56,14 @@ public class UsersResource {
 
 	@POST
 	@Path("/create")
-	public String createUser(@QueryParam("email") final String email) {
+	public String createUser(@QueryParam("email") final String email, @QueryParam("password") final String password) {
 
 		for (User user : users) {
 			if (user.getEmail().equals(email)) {
 				return null;
 			}
 		}
-		users.add(new User(email));
+		users.add(new User(email, password));
 		save();
 
 		return "user created";
@@ -68,54 +71,69 @@ public class UsersResource {
 
 	@POST
 	@Path("/{user}/google")
-	public String setGoogleToken(@PathParam("user") final String user, @QueryParam("token") final String token) {
-		int userIndex = Integer.parseInt(user);
-		if (userIndex >= users.size()) {
+	public String setGoogleToken(@PathParam("user") final String id, @QueryParam("token") final String token) {
+		
+		
+		if(userById(id)<0){
 			return null;
-			// user not found
 		}
-		users.get(userIndex).setGoogleToken(token);
+		
+		users.get(userById(id)).setGoogleToken(token);
 		save();
 		return "google token added";
 	}
 
 	@POST
 	@Path("/{user}/dropbox")
-	public String setDropboxToken(@PathParam("user") final String user, @QueryParam("token") final String token) {
-		int userIndex = Integer.parseInt(user);
-		if (userIndex >= users.size()) {
+	public String setDropboxToken(@PathParam("user") final String id, @QueryParam("token") final String token) {
+
+		if(userById(id)<0){
 			return null;
-			// user not found
 		}
-		users.get(userIndex).setDropboxToken(token);
+		users.get(userById(id)).setDropboxToken(token);
 		save();
 		return "dropbox token added";
 	}
 
 	@GET
 	@Path("/{user}/google")
-	public String getGoogleToken(@PathParam("user") final String user) {
-		int userIndex = Integer.parseInt(user);
-		if (userIndex >= users.size()) {
+	public String getGoogleToken(@PathParam("user") final String id) {
+
+		
+		if(userById(id)<0){
 			return null;
-			// user not found
 		}
 
-		return users.get(userIndex).getGoogleToken();
+		return users.get(userById(id)).getGoogleToken();
 	}
 
 	@GET
 	@Path("/{user}/dropbox")
-	public String getDropboxToken(@PathParam("user") final String user) {
-		int userIndex = Integer.parseInt(user);
-		if (userIndex >= users.size()) {
+	public String getDropboxToken(@PathParam("user") final String id) {
+
+		if(userById(id)<0){
 			return null;
-			// user not found
 		}
 
-		return users.get(userIndex).getDropboxToken();
+		return users.get(userById(id)).getDropboxToken();
 	}
 
+	
+	public User getUser(int index){
+		return users.get(index);
+	}
+	
+	
+	private int userById(String id){
+		for (User user : users) {
+			if((user.getId()!=null)&&(user.getId().equals(id))){
+				return users.indexOf(user);
+			}
+			
+		}
+		
+		return -1;
+	}
 	private void save() {
 		try {
 			FileOutputStream file = new FileOutputStream("users.tmp");

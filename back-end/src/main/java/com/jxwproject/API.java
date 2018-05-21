@@ -15,7 +15,9 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.io.FilenameUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.jxwproject.apisrest.DriveREST;
 import com.jxwproject.apisrest.DropboxREST;
@@ -29,22 +31,24 @@ import com.jxwproject.fichiers.googledrive.GoogleDriveFilesList;
  */
 @Path("files")
 public class API {
-	
+
 	private User user;
 	private DropboxREST dropbox;
 	private DriveREST drive;
-	
+
 	public API() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		this.user = new Gson().fromJson(new FileReader("comptedev.json"), User.class);
-		System.out.println("Dropbox Token : "+user.getDropboxToken());
-		System.out.println("Google Token : "+user.getGoogleToken());
-		
+		// this.user = new Gson().fromJson(new FileReader("comptedev.json"),
+		// User.class);
+		this.user = new UsersResource().getUser(0);
+		System.out.println("Dropbox Token : " + user.getDropboxToken());
+		System.out.println("Google Token : " + user.getGoogleToken());
+
 		dropbox = new DropboxREST();
 		drive = new DriveREST();
-		
+
 	}
-	
-    public User getUser() {
+
+	public User getUser() {
 		return user;
 	}
 
@@ -52,7 +56,28 @@ public class API {
 		this.user = user;
 	}
 
-	
+	@GET
+	@Path("/{file}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public MetaFile fileInfo(@PathParam("file") String file) {
+
+		if (user.getGoogleToken() != null) {
+			System.out.println(drive.filePath(file, user.getGoogleToken()));
+			System.out.println("bonjour");
+			GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), file);
+
+			MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
+					info.getKind(),0, info.getMimeType());
+			return metafile;
+		}
+		
+		if (user.getDropboxToken() != null) {
+			
+			
+		}
+
+		return null;
+	}
 
 	/**
      * Méthode permettant de renvoyer la liste de tous les 
