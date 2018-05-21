@@ -259,6 +259,28 @@ public class DriveREST {
 	}
 
 	// ************************ internal methods ************************
+	
+	
+	public String filePath(String file, String token){
+		StringBuilder path = new StringBuilder();
+		path.append(fileAttributs(token, file, "title").getAsString());
+		while(true){
+			if (fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("isRoot").getAsBoolean()){
+				path.append("/",0,0);
+				break;
+			}else{
+				
+				file = fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
+				path.append(fileAttributs(token, file, "title").getAsString(),0,0);
+				
+			}	
+			
+		}
+		
+		
+		return path.toString();
+	}
+	
 
 	public JsonElement fileAttributs(final String token, final String file, final String att) {
 

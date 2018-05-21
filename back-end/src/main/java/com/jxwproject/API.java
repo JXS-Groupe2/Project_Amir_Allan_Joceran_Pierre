@@ -62,15 +62,22 @@ public class API {
 	public MetaFile fileInfo(@PathParam("file") String file) {
 
 		if (user.getGoogleToken() != null) {
-
+			System.out.println(drive.filePath(file, user.getGoogleToken()));
+			System.out.println("bonjour");
 			GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), file);
 
-			System.out.println(info.getName());
 			MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
-					info.getKind(), 0, info.getMimeType());
+					info.getKind(),0, info.getMimeType());
 			return metafile;
 		}
+		
+		if (user.getDropboxToken() != null) {
+			
+			
+		}
 
+		
+		
 		return null;
 	}
 
