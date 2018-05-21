@@ -39,5 +39,4 @@ public class User implements Serializable {
 	public void setDropboxToken(String dropboxToken) {
 		this.dropboxToken = dropboxToken;
 	}
-
 }
