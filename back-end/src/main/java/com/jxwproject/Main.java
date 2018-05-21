@@ -25,7 +25,8 @@ public class Main {
         // create a resource config that scans for JAX-RS resources and providers
         // in com.jxwproject package
         final ResourceConfig rc = new ResourceConfig().packages("com.jxwproject");
-        rc.register(MultiPartFeature.class);
+        rc.register(MultiPartFeature.class).register(new CORSFilter());
+        
 
 
         // create and start a new instance of grizzly http server
