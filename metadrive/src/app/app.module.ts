@@ -9,6 +9,7 @@ import { GoogleApiService } from './google-api.service';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { ServicesAuthComponent } from './services-auth/services-auth.component';
+import { BackendApiService } from './backend-api.service';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ServicesAuthComponent } from './services-auth/services-auth.component';
     AppRoutingModule
   ],
   providers: [
-    GoogleApiService
+    GoogleApiService,
+    BackendApiService
   ],
   bootstrap: [AppComponent]
 })

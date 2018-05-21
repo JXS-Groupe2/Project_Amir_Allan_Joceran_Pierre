@@ -20,7 +20,7 @@ public class UsersResource {
 	private ArrayList<User> users;
 
 	public UsersResource() {
-
+		/*
 		try {
 			FileInputStream file = new FileInputStream("users.tmp");
 			ObjectInputStream stream = new ObjectInputStream(file);
@@ -31,7 +31,11 @@ public class UsersResource {
 			users = new ArrayList<User>();
 			System.out.println("new file");
 		}
-
+		*/
+		// A MODIFIER
+		users = new ArrayList<User>();
+		users.add(new User("admin"));
+		users.add(new User("user@example.com"));
 	}
 
 	@GET
