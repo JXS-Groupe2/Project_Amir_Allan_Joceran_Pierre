@@ -3,9 +3,18 @@ package com.jxwproject;
 import java.io.Serializable;
 
 public class User implements Serializable {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String email;
-	private String googleToken,dropboxToken;
+	private String googleToken, dropboxToken;
+
+	public User(String email) {
+
+		this.email = email;
+	}
 
 	public String getEmail() {
 		return email;
@@ -30,16 +39,4 @@ public class User implements Serializable {
 	public void setDropboxToken(String dropboxToken) {
 		this.dropboxToken = dropboxToken;
 	}
-
-	public User(String email) {
-
-		this.email=email;
-	}
-	
-	public User() {
-		
-	}
-
-	
-
 }

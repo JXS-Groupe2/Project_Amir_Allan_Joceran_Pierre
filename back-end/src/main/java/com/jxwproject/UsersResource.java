@@ -11,49 +11,61 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+
+import javassist.compiler.SyntaxError;
 
 @Path("users")
 public class UsersResource {
-	public ArrayList<User> users;
+	private ArrayList<User> users;
 
 	public UsersResource() {
 
-		try{
-		FileInputStream file = new FileInputStream("users.tmp");
-		ObjectInputStream stream = new ObjectInputStream(file);
-		users = (ArrayList<User>) stream.readObject();
-		stream.close();
-		}catch(Exception e){
-		users = new ArrayList<User>();
-		}
-		if(users.size()<=0){
+		try {
+			FileInputStream file = new FileInputStream("users.tmp");
+			ObjectInputStream stream = new ObjectInputStream(file);
+			users = (ArrayList<User>) stream.readObject();
+			stream.close();
+			//System.out.println("uploaded"+users.size());
+		} catch (Exception e) {
 			users = new ArrayList<User>();
+			System.out.println("new file");
 		}
+
 	}
 
 	@GET
-	@Path("/")
-	public String getuserid(@PathParam("email") final String email) {
-		if (users.contains(email)) {
-			return String.valueOf(users.indexOf(email));
-		} else {
-			return null;
+	@Path("/user")
+	public String getuserid(@QueryParam("email") final String email) {
+		for (User user : users) {
+			if (user.getEmail().equals(email)) {
+
+				return String.valueOf(users.indexOf(user));
+			}
 		}
+		return null;
+
 	}
 
 	@POST
 	@Path("/create")
-	public String createUser(@PathParam("email") final String email) {
+	public String createUser(@QueryParam("email") final String email) {
 
+		for (User user : users) {
+			if (user.getEmail().equals(email)) {
+				return null;
+			}
+		}
 		users.add(new User(email));
 		save();
+
 		return "user created";
 	}
 
 	@POST
 	@Path("/{user}/google")
-	public String setGoogleToken(@PathParam("user") final String user, @PathParam("token") final String token) {
-		int userIndex = Integer.getInteger(user);
+	public String setGoogleToken(@PathParam("user") final String user, @QueryParam("token") final String token) {
+		int userIndex = Integer.parseInt(user);
 		if (userIndex >= users.size()) {
 			return null;
 			// user not found
@@ -65,22 +77,21 @@ public class UsersResource {
 
 	@POST
 	@Path("/{user}/dropbox")
-	public String setDropboxToken(@PathParam("user") final String user, @PathParam("token") final String token) {
-		int userIndex = Integer.getInteger(user);
+	public String setDropboxToken(@PathParam("user") final String user, @QueryParam("token") final String token) {
+		int userIndex = Integer.parseInt(user);
 		if (userIndex >= users.size()) {
 			return null;
 			// user not found
 		}
 		users.get(userIndex).setDropboxToken(token);
 		save();
-
 		return "dropbox token added";
 	}
 
 	@GET
 	@Path("/{user}/google")
 	public String getGoogleToken(@PathParam("user") final String user) {
-		int userIndex = Integer.getInteger(user);
+		int userIndex = Integer.parseInt(user);
 		if (userIndex >= users.size()) {
 			return null;
 			// user not found
@@ -92,7 +103,7 @@ public class UsersResource {
 	@GET
 	@Path("/{user}/dropbox")
 	public String getDropboxToken(@PathParam("user") final String user) {
-		int userIndex = Integer.getInteger(user);
+		int userIndex = Integer.parseInt(user);
 		if (userIndex >= users.size()) {
 			return null;
 			// user not found
