@@ -16,26 +16,6 @@ public class VideoMediaMetadata {
     @Expose
     private String durationMillis;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public VideoMediaMetadata() {
-    }
-
-    /**
-     * 
-     * @param height
-     * @param width
-     * @param durationMillis
-     */
-    public VideoMediaMetadata(String width, String height, String durationMillis) {
-        super();
-        this.width = width;
-        this.height = height;
-        this.durationMillis = durationMillis;
-    }
-
     public String getWidth() {
         return width;
     }

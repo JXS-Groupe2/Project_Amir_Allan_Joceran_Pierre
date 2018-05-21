@@ -13,24 +13,6 @@ public class Thumbnail {
     @Expose
     private String mimeType;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public Thumbnail() {
-    }
-
-    /**
-     * 
-     * @param image
-     * @param mimeType
-     */
-    public Thumbnail(String image, String mimeType) {
-        super();
-        this.image = image;
-        this.mimeType = mimeType;
-    }
-
     public String getImage() {
         return image;
     }

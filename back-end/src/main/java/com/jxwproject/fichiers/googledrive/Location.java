@@ -16,26 +16,6 @@ public class Location {
     @Expose
     private String altitude;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public Location() {
-    }
-
-    /**
-     * 
-     * @param altitude
-     * @param longitude
-     * @param latitude
-     */
-    public Location(String latitude, String longitude, String altitude) {
-        super();
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.altitude = altitude;
-    }
-
     public String getLatitude() {
         return latitude;
     }

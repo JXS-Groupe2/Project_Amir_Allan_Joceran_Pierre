@@ -12,44 +12,18 @@ public class Owner {
     @SerializedName("displayName")
     @Expose
     private String displayName;
-    @SerializedName("picture")
+    @SerializedName("photoLink")
     @Expose
-    private Picture_ picture;
-    @SerializedName("isAuthenticatedUser")
+    private String photoLink;
+    @SerializedName("me")
     @Expose
-    private String isAuthenticatedUser;
+    private String me;
     @SerializedName("permissionId")
     @Expose
     private String permissionId;
     @SerializedName("emailAddress")
     @Expose
     private String emailAddress;
-
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public Owner() {
-    }
-
-    /**
-     * 
-     * @param picture
-     * @param isAuthenticatedUser
-     * @param emailAddress
-     * @param permissionId
-     * @param displayName
-     * @param kind
-     */
-    public Owner(String kind, String displayName, Picture_ picture, String isAuthenticatedUser, String permissionId, String emailAddress) {
-        super();
-        this.kind = kind;
-        this.displayName = displayName;
-        this.picture = picture;
-        this.isAuthenticatedUser = isAuthenticatedUser;
-        this.permissionId = permissionId;
-        this.emailAddress = emailAddress;
-    }
 
     public String getKind() {
         return kind;
@@ -67,20 +41,20 @@ public class Owner {
         this.displayName = displayName;
     }
 
-    public Picture_ getPicture() {
-        return picture;
+    public String getPhotoLink() {
+        return photoLink;
     }
 
-    public void setPicture(Picture_ picture) {
-        this.picture = picture;
+    public void setPhotoLink(String photoLink) {
+        this.photoLink = photoLink;
     }
 
-    public String getIsAuthenticatedUser() {
-        return isAuthenticatedUser;
+    public String getMe() {
+        return me;
     }
 
-    public void setIsAuthenticatedUser(String isAuthenticatedUser) {
-        this.isAuthenticatedUser = isAuthenticatedUser;
+    public void setMe(String me) {
+        this.me = me;
     }
 
     public String getPermissionId() {

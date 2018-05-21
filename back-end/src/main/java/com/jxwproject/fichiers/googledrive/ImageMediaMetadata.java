@@ -18,9 +18,9 @@ public class ImageMediaMetadata {
     @SerializedName("location")
     @Expose
     private Location location;
-    @SerializedName("date")
+    @SerializedName("time")
     @Expose
-    private String date;
+    private String time;
     @SerializedName("cameraMake")
     @Expose
     private String cameraMake;
@@ -70,62 +70,6 @@ public class ImageMediaMetadata {
     @Expose
     private String lens;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public ImageMediaMetadata() {
-    }
-
-    /**
-     * 
-     * @param maxApertureValue
-     * @param exposureTime
-     * @param location
-     * @param width
-     * @param isoSpeed
-     * @param whiteBalance
-     * @param cameraMake
-     * @param exposureBias
-     * @param flashUsed
-     * @param date
-     * @param lens
-     * @param aperture
-     * @param focalLength
-     * @param sensor
-     * @param exposureMode
-     * @param height
-     * @param rotation
-     * @param colorSpace
-     * @param subjectDistance
-     * @param meteringMode
-     * @param cameraModel
-     */
-    public ImageMediaMetadata(String width, String height, String rotation, Location location, String date, String cameraMake, String cameraModel, String exposureTime, String aperture, String flashUsed, String focalLength, String isoSpeed, String meteringMode, String sensor, String exposureMode, String colorSpace, String whiteBalance, String exposureBias, String maxApertureValue, String subjectDistance, String lens) {
-        super();
-        this.width = width;
-        this.height = height;
-        this.rotation = rotation;
-        this.location = location;
-        this.date = date;
-        this.cameraMake = cameraMake;
-        this.cameraModel = cameraModel;
-        this.exposureTime = exposureTime;
-        this.aperture = aperture;
-        this.flashUsed = flashUsed;
-        this.focalLength = focalLength;
-        this.isoSpeed = isoSpeed;
-        this.meteringMode = meteringMode;
-        this.sensor = sensor;
-        this.exposureMode = exposureMode;
-        this.colorSpace = colorSpace;
-        this.whiteBalance = whiteBalance;
-        this.exposureBias = exposureBias;
-        this.maxApertureValue = maxApertureValue;
-        this.subjectDistance = subjectDistance;
-        this.lens = lens;
-    }
-
     public String getWidth() {
         return width;
     }
@@ -158,12 +102,12 @@ public class ImageMediaMetadata {
         this.location = location;
     }
 
-    public String getDate() {
-        return date;
+    public String getTime() {
+        return time;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getCameraMake() {

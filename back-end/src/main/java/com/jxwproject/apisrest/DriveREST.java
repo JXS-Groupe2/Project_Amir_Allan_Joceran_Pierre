@@ -15,6 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
@@ -30,6 +32,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.jxwproject.fichiers.dropbox.DropboxFileRessource;
 import com.jxwproject.fichiers.googledrive.GoogleDriveFileRessource;
+import com.jxwproject.fichiers.googledrive.GoogleDriveFilesList;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -65,31 +68,22 @@ public class DriveREST {
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public static List<GoogleDriveFileRessource> getFilesList(String token) {
-
-		Client client = Client.create();
-		WebResource webResource = client.resource("https://www.googleapis.com/drive/v3/files");
-
-		ClientResponse response = null;
-		response = webResource.header("Content-Type", "application/json;charset=UTF-8")
-				.header("Authorization", "Bearer " + token).get(ClientResponse.class);
-
-		if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-		}
-		String output = response.getEntity(String.class);
-
-		Gson gson = new Gson();
-		List<GoogleDriveFileRessource> gdfrList = new ArrayList<GoogleDriveFileRessource>();
-		JsonParser parser = new JsonParser();
+	public GoogleDriveFilesList getFilesList(String token) {
+        final javax.ws.rs.client.Client client = ClientBuilder.newBuilder().build();
+        final WebTarget webtarget = client.target("https://www.googleapis.com").path("drive/v3/files");
+		String response;
 		
-		JsonObject root = parser.parse(output).getAsJsonObject();
-		JsonArray fileList = root.getAsJsonArray("entities");
-		GoogleDriveFileRessource gdfr;
-		for (JsonElement file : fileList) {
-		    gdfr = gson.fromJson(file, GoogleDriveFileRessource.class);
-		    gdfrList.add(gdfr);
-		}
+		System.out.println("Envoi de la requête");
+		response = webtarget
+				.queryParam("q", "%27root%27%20in%20parents")
+                .request(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .get(String.class);
+		
+		Gson gson = new Gson();
+		GoogleDriveFilesList gdfrList = gson.fromJson(response, GoogleDriveFilesList.class);
+		System.out.println("Post processing : "+gdfrList.getKind() + " " +gdfrList.getFiles().length);
+
 		return gdfrList;
 
 	}
@@ -126,10 +120,10 @@ public class DriveREST {
 	}
 	
 	@GET
-	public String[] fileChildren(String token, final String folder) {
+	public String[] fileChildren(String token/*, final String folder*/) {
 
 		Client client = Client.create();
-		WebResource webResource = client.resource("https://www.googleapis.com/drive/v2/files/").path(folder).path("children");
+		WebResource webResource = client.resource("https://www.googleapis.com/drive/v2/files/").path("/").path("children");
 
 		ClientResponse response = null;
 		response = webResource.header("Content-Type", "application/json;charset=UTF-8")
@@ -146,7 +140,7 @@ public class DriveREST {
 		for (int i =0; i<jsonresponse.size();i++){
 			result[i]=jsonresponse.get(i).getAsJsonObject().get("id").getAsString();
 		}
-		
+			
 
 		return result;
 
