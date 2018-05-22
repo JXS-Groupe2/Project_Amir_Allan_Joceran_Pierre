@@ -15,6 +15,8 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { FileDetailsComponent } from './file-details/file-details.component';
 import { StorageInfoComponent } from './storage-info/storage-info.component';
 import { BackendApiService } from './backend-api.service';
+import { ShortNamePipe } from './short-name.pipe';
+import { SelectedFileDetailsService } from './selected-file-details.service';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import { BackendApiService } from './backend-api.service';
     UserInfoComponent,
     FileDetailsComponent,
     StorageInfoComponent,
+    ShortNamePipe,
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import { BackendApiService } from './backend-api.service';
   ],
   providers: [
     GoogleApiService,
-    BackendApiService
+    BackendApiService,
+    SelectedFileDetailsService
   ],
   bootstrap: [AppComponent]
 })

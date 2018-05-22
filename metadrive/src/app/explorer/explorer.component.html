@@ -1,55 +1,23 @@
 <div class="card">
-  <div class="card-header">Mon Metadrive > Projet</div>
+  <div class="card-header">
+    <div class="row justify-content-between">
+      <div class="col">Mon Metadrive : {{currentPath}}</div>
+      <button id="btn-new-file" class="col-2 btn btn-success">Nouveau</button>
+    </div>
+  </div>
   <div class="card-block">
     <div class="row justify-content-start">
-      <div class="col-3 element">
-        <div class="row">
-          <div class="col element-image">
-            <img src={{folderImagePath}}>
+      <div *ngFor="let file of files">
+        <div class="col element" (click)="setSelectedFileDetails(file)">
+          <div class="row">
+            <div class="col element-image">
+              <img *ngIf="isFolder(file)" src={{folderImagePath}}>
+              <img *ngIf="!isFolder(file)" src={{fileImagePath}}>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col element-name">images</div>
-        </div>
-      </div>
-      <div class="col-3 element">
-        <div class="row">
-          <div class="col element-image">
-            <img src={{folderImagePath}}>
+          <div class="row">
+            <div class="col element-name">{{file.name | shortName}}</div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col element-name">back-end</div>
-        </div>
-      </div>
-      <div class="col-3 element">
-        <div class="row">
-          <div class="col element-image">
-            <img src={{fileImagePath}}>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col element-name">notes.txt</div>
-        </div>
-      </div>
-      <div class="col-3 element">
-        <div class="row">
-          <div class="col element-image">
-            <img src={{fileImagePath}}>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col element-name">sprint.pdf</div>
-        </div>
-      </div>
-      <div class="col-3 element">
-        <div class="row">
-          <div class="col element-image">
-            <img src={{fileImagePath}}>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col element-name">TP1.odt</div>
         </div>
       </div>
     </div>
