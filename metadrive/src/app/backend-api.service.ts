@@ -17,6 +17,14 @@ export class BackendApiService {
     return this.http.get(url, {observe: "response"});
   }
 
+  createUser(credentials) {
+    var url = this.serverEndpoint + "/users/create"
+              + "?email=" + credentials["email"]
+              + "&password=" + credentials["password"];
+
+    return this.http.get(url, {observe: "response"});
+  }
+
   getFiles() {
     var userId = localStorage.getItem("userId");
     var url = this.serverEndpoint + "/" + userId + "/files";
