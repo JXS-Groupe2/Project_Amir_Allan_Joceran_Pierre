@@ -65,7 +65,7 @@ public class UsersResource {
 		save();
 
 		
-		return new Gson().toJson("user created");
+		return new Gson().toJson(users.get(users.size()-1));
 	}
 
 	@POST

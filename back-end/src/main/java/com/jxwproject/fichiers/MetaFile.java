@@ -67,7 +67,8 @@ public class MetaFile {
 	}
 	
 	public static MetaFile dropboxToMetaFile(DropboxFileRessource d) {
-		assert(d!=null);
+		if(d==null)
+			return null;
 		MetaFile m = new MetaFile();
 		m.setName(d.getName());
 		m.setFileType(d.getFileType());

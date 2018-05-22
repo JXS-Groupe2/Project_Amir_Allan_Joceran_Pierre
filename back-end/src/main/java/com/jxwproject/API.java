@@ -37,6 +37,8 @@ public class API {
 	public API(@PathParam("id") String id) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		
 		this.user = new UsersResource().getUserById(id);
+		
+		//this.user = new Gson().fromJson(new FileReader("comptedev.json"), User.class);
 		System.out.println("Dropbox Token : " + user.getDropboxToken());
 		System.out.println("Google Token : " + user.getGoogleToken());
 
@@ -62,29 +64,26 @@ public class API {
 		System.out.println("fileInfo");
 
 		if (user.getGoogleToken() != null) {
-			
-			GoogleDriveFileRessource[] files =drive.allFiles(user.getGoogleToken()).getFiles();
-			
-			for ( GoogleDriveFileRessource fichier : files) {
-				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals("/"+file)){
+
+			GoogleDriveFileRessource[] files = drive.allFiles(user.getGoogleToken()).getFiles();
+
+			for (GoogleDriveFileRessource fichier : files) {
+				if (drive.filePath(fichier.getId(), user.getGoogleToken()).equals("/" + file)) {
 					GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), fichier.getId());
 
-					MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
-							info.getKind(),0, info.getMimeType());
+					MetaFile metafile = new MetaFile(info.getName(),
+							new SimpleEntry<String, String>("google", info.getId()), info.getKind(), 0,
+							info.getMimeType());
 					mf.add(metafile);
 				}
 			}
-
-			System.out.println("end google");
 		}
-		
+
 		if (user.getDropboxToken() != null) {
-			String meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
-			System.out.println(meta);
-			Gson gson = new Gson();
-			MetaFile mfile = gson.fromJson(meta, MetaFile.class);
-			System.out.println(mfile);
-			mf.add(mfile);
+			DropboxFileRessource meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
+			MetaFile mfile = MetaFile.dropboxToMetaFile(meta);
+			if (mfile != null)
+				mf.add(mfile);
 			System.out.println("end dropbox");
 		}
 
@@ -175,9 +174,7 @@ public class API {
 			}
     	}
     	
-    	
     	Gson gson = new Gson();
-    	
     	return gson.toJson(meta);
     	
     }
@@ -211,6 +208,7 @@ public class API {
     /**
      * Méthode pour télécharger un fichier.
      * @param filePath
+     * @return la réponse de la requête renvoyant le fichier à télécharger
      */
     @GET
     @Path("{filepath: .*}/download")
@@ -239,4 +237,27 @@ public class API {
     	
     	
     }
+    
+    /**
+     * Methode pour renommer un fichier
+     * @param oldFilePath
+     * @param newFilePath
+     * @return Metafile
+     */
+    @GET
+    @Path("{oldFilePath: .*}/rename/{newFilePath: .*}")
+    public String rename(@PathParam("oldFilePath") final String oldFilePath, @PathParam("newFilePath") final String newFilePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		
+    	List<MetaFile> meta = new ArrayList<MetaFile>();
+    	DropboxFileRessource dropboxRes = null;
+    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
+    		dropboxRes = dropbox.renameFile(user.getDropboxToken(), oldFilePath, newFilePath);		
+    	}
+    	meta.add(MetaFile.dropboxToMetaFile(dropboxRes));
+    	
+    	Gson gson = new Gson();
+    	
+    	return gson.toJson(meta);
+    	
+    } 
 }
