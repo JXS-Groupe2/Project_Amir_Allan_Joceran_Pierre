@@ -13,8 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -28,22 +26,23 @@ import com.jxwproject.fichiers.googledrive.GoogleDriveFilesList;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("files")
+@Path("files/{id}")
 public class API {
 
 	private User user;
 	private DropboxREST dropbox;
 	private DriveREST drive;
 
-	public API() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		 this.user = new Gson().fromJson(new FileReader("comptedev.json"),
-		 User.class);
-		//this.user = new UsersResource().getUser(0);
+	
+	public API(@PathParam("id") String id) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		
+		this.user = new UsersResource().getUserById(id);
 		System.out.println("Dropbox Token : " + user.getDropboxToken());
 		System.out.println("Google Token : " + user.getGoogleToken());
 
 		dropbox = new DropboxREST();
 		drive = new DriveREST();
+		System.out.println(id);
 
 	}
 
@@ -58,7 +57,9 @@ public class API {
 	@GET
 	@Path("/{file: .*}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public MetaFile fileInfo(@PathParam("file") String file) {
+	public String fileInfo(@PathParam("file") String file) {
+
+		List<MetaFile> mf = new ArrayList<MetaFile>();
 
 		if (user.getGoogleToken() != null) {
 			file = "/"+file;
@@ -71,23 +72,21 @@ public class API {
 
 					MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
 							info.getKind(),0, info.getMimeType());
-					return metafile;
+					mf.add(metafile);
 				}
 			}
-			
+
 		}
 		
 		if (user.getDropboxToken() != null) {
 			String meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
 			Gson gson = new Gson();
 			MetaFile mfile = gson.fromJson(meta, MetaFile.class);
-			
-			return mfile;
+			mf.add(mfile);
 			
 		}
 
-		System.out.println("no file found");
-		return null;
+		return new Gson().toJson(mf);
 	}
 
 	/**
