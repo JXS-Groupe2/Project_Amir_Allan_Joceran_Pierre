@@ -10,7 +10,6 @@ import { BackendApiService } from '../backend-api.service';
 })
 export class AuthComponent implements OnInit {
   
-  serverEndpoint = "http://localhost:8080/users";
   authForm: FormGroup;
   areCredentialsIncorrect = false;
 
@@ -35,7 +34,7 @@ export class AuthComponent implements OnInit {
 
       this.backend.logInUser(credentials).subscribe(resp => {
         console.log(resp);
-        if (resp.status == 200) {
+        if (resp.ok) {
           localStorage.setItem("userId", resp.body.toString());
           localStorage.setItem("userEmail", value["email"]);
           this.router.navigate(["/metadrive"]);
@@ -44,6 +43,10 @@ export class AuthComponent implements OnInit {
         }
       });
     }
+  }
+
+  createUser() {
+    this.router.navigate(["/createUser"]);
   }
 
 }

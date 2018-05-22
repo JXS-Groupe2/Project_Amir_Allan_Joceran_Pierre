@@ -10,7 +10,10 @@
         <div class="form-group">
           <input type="password" class="form-control" id="password" placeholder="Mot de passe" [formControl]="authForm.controls['password']">
         </div>
-        <button type="submit" class="btn btn-primary container">Se connecter</button>
+        <div class="form-group">
+          <button type="submit" class="col btn btn-primary">Se connecter</button>
+          <button class="col btn btn-success" (click)="createUser()">Créer un compte</button>
+        </div>
       </form>
     </div>
   </div>

@@ -22,7 +22,7 @@ export class BackendApiService {
               + "?email=" + credentials["email"]
               + "&password=" + credentials["password"];
 
-    return this.http.get(url, {observe: "response"});
+    return this.http.post(url, {observe: "response"});
   }
 
   getFiles() {

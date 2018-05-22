@@ -10,12 +10,11 @@ import { BackendApiService } from '../backend-api.service';
 })
 export class CreateUserComponent implements OnInit {
 
-  serverEndpoint = "http://localhost:8080/users";
-  createuserForm: FormGroup;
+  createUserForm: FormGroup;
   areCredentialsIncorrect = false;
 
   constructor(private router: Router, private fb: FormBuilder, private backend: BackendApiService) {
-    this.createuserForm = fb.group({
+    this.createUserForm = fb.group({
       'email': '',
       'password': ''
     });
@@ -35,8 +34,8 @@ export class CreateUserComponent implements OnInit {
 
       this.backend.createUser(credentials).subscribe(resp => {
         console.log(resp);
-        if (resp.status == 200) {
-          localStorage.setItem("userId", resp.body.toString());
+        if (resp["ok"]) {
+          localStorage.setItem("userId", resp["body"].toString());
           localStorage.setItem("userEmail", value["email"]);
           this.router.navigate(["/metadrive"]);
         } else {

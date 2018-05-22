@@ -6,3 +6,7 @@
 .form-group {
   margin: 20px;
 }
+
+.btn {
+  font-weight: bold;
+}
