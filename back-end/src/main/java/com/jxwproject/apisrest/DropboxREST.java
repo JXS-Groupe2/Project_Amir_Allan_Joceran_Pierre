@@ -52,8 +52,10 @@ public class DropboxREST{
 					.post(ClientResponse.class);
 		    
 			if (response.getStatus() != 200) {
-			   throw new RuntimeException("Failed : HTTP error code : "
-				+ response.getStatus());
+//			   throw new RuntimeException("Failed : HTTP error code : "
+//				+ response.getStatus());
+				System.err.println("error drobox infos");
+				return null;
 			}
 
 			String output = response.getEntity(String.class);
@@ -68,7 +70,7 @@ public class DropboxREST{
 	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getFileMetadata(String token, String filepath) {
+	public DropboxFileRessource getFileMetadata(String token, String filepath) {
 		String finalPath;
 		finalPath = "/"+filepath;
 		
@@ -85,8 +87,10 @@ public class DropboxREST{
 				.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
 		
 		if (response.getStatus() != 200) {
-		   throw new RuntimeException("Failed : HTTP error code : "
-			+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus() + "\n"
+//					+ response.getHeaders() + "\n" + response.readEntity(String.class) + "\n");
+		System.err.println("error drobox getfileMetadata");
+			return null;
 		}
 
 		String output = response.readEntity(String.class);
@@ -95,8 +99,8 @@ public class DropboxREST{
 		
 		DropboxFileRessource dpf = gson.fromJson(output, DropboxFileRessource.class);
 		
-		String textoutput = "nom : "+dpf.getName() + " | id : "+dpf.getId() + " | path : "+ dpf.getPathLower() +"| type : "+dpf.getFileType();
-		return textoutput;
+		return dpf;
+		
 	}
 	
 	/** Open a file in browser from dropbox with file path
@@ -119,8 +123,10 @@ public class DropboxREST{
 				.post(ClientResponse.class);
 	    
 		if (response.getStatus() != 200) {
-		   throw new RuntimeException("Failed : HTTP error code : "
-			+ response.getStatus());
+//		   throw new RuntimeException("Failed : HTTP error code : "
+//			+ response.getStatus());
+			System.err.println("error dropbox openfile");
+			return null;
 		}
 
 		String output = response.getEntity(String.class);
@@ -149,8 +155,10 @@ public class DropboxREST{
 				.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
 		
 		if (response.getStatus() != 200) {
-		   throw new RuntimeException("Failed : HTTP error code : "
-			+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+//		   throw new RuntimeException("Failed : HTTP error code : "
+//			+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+			System.err.println("error dropbox getContent token");
+			return null;
 		}
 
 		String output = response.readEntity(String.class);
@@ -194,8 +202,10 @@ public class DropboxREST{
 				.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
 		
 		if (response.getStatus() != 200) {
-		   throw new RuntimeException("Failed : HTTP error code : "
-			+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+//		   throw new RuntimeException("Failed : HTTP error code : "
+//			+ response.getStatus() + "\n" + response.getHeaders() + "\n" +response.readEntity(String.class)+ "\n");
+			System.err.println("error dropbox getContent token path");
+			return  null;
 		}
 
 		String output = response.readEntity(String.class);
@@ -241,8 +251,9 @@ public class DropboxREST{
 						.post(ClientResponse.class);
 			    
 				if (response.getStatus() != 200) {
-				   throw new RuntimeException("Failed : HTTP error code : "
-					+ response.getStatus());
+//				   throw new RuntimeException("Failed : HTTP error code : "
+//					+ response.getStatus());
+					System.err.println("error dropbox download");
 				}
 
 				InputStream res = response.getEntity(InputStream.class);

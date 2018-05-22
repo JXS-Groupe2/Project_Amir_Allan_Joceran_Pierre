@@ -37,6 +37,8 @@ public class API {
 	public API(@PathParam("id") String id) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		
 		this.user = new UsersResource().getUserById(id);
+		
+		//this.user = new Gson().fromJson(new FileReader("comptedev.json"), User.class);
 		System.out.println("Dropbox Token : " + user.getDropboxToken());
 		System.out.println("Google Token : " + user.getGoogleToken());
 
@@ -59,30 +61,30 @@ public class API {
 	public String fileInfo(@PathParam("file") String file) {
 
 		List<MetaFile> mf = new ArrayList<MetaFile>();
+		System.out.println("fileInfo");
 
 		if (user.getGoogleToken() != null) {
-			file = "/"+file;
-			
-			GoogleDriveFileRessource[] files =drive.allFiles(user.getGoogleToken()).getFiles();
-			
-			for ( GoogleDriveFileRessource fichier : files) {
-				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals(file)){
+
+			GoogleDriveFileRessource[] files = drive.allFiles(user.getGoogleToken()).getFiles();
+
+			for (GoogleDriveFileRessource fichier : files) {
+				if (drive.filePath(fichier.getId(), user.getGoogleToken()).equals("/" + file)) {
 					GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), fichier.getId());
 
-					MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
-							info.getKind(),0, info.getMimeType());
+					MetaFile metafile = new MetaFile(info.getName(),
+							new SimpleEntry<String, String>("google", info.getId()), info.getKind(), 0,
+							info.getMimeType());
 					mf.add(metafile);
 				}
 			}
-
 		}
-		
+
 		if (user.getDropboxToken() != null) {
-			String meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
-			Gson gson = new Gson();
-			MetaFile mfile = gson.fromJson(meta, MetaFile.class);
-			mf.add(mfile);
-			
+			DropboxFileRessource meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
+			MetaFile mfile = MetaFile.dropboxToMetaFile(meta);
+			if (mfile != null)
+				mf.add(mfile);
+			System.out.println("end dropbox");
 		}
 
 		return new Gson().toJson(mf);
@@ -106,7 +108,7 @@ public class API {
     	
     	//Deuxième condition pour le compte dev
     	// TODO : supprimer ça une fois les connexions réglés
-    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != ""))
+    	if((user.getDropboxToken() != null))
     	{
     		System.out.println("Récupération des fichiers Dropbox !");
     		dfr = dropbox.getContent(user.getDropboxToken());
@@ -121,7 +123,7 @@ public class API {
     	
     	//Deuxième condition pour le compte dev
     	// TODO : supprimer ça une fois les connexions réglés
-    	if((user.getGoogleToken() != null) || (user.getGoogleToken() != ""))
+    	if((user.getGoogleToken() != null))
     	{
     		System.out.println("Récupération des fichiers Google Drive !");
     		gdfr = drive.getFilesList(user.getGoogleToken());
@@ -172,9 +174,7 @@ public class API {
 			}
     	}
     	
-    	
     	Gson gson = new Gson();
-    	
     	return gson.toJson(meta);
     	
     }

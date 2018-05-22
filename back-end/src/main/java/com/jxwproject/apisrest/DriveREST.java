@@ -56,7 +56,9 @@ public class DriveREST {
 				.get(ClientResponse.class);
 
 		if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			//throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			System.err.println("error google getInfos");
+			return null;
 		}
 		String output = response.getEntity(String.class);
 
@@ -125,7 +127,7 @@ public class DriveREST {
 				.get(ClientResponse.class);
 
 		if (response.getStatus() != 200) {
-			System.err.println(response.getStatus());
+			System.err.println("error google fileInfo");
 			return null;
 		}
 		String output = response.getEntity(String.class);
@@ -157,8 +159,10 @@ public class DriveREST {
 				.get(ClientResponse.class);
 
 		if (response.getStatus() != 200) {
-			System.err.println(response.getStatus());
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+//			System.err.println(response.getStatus());
+//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			System.err.println("error google filechildren");
+			return new String[0];
 		}
 		JsonParser parser = new JsonParser();
 		JsonArray jsonresponse = parser.parse(response.getEntity(String.class)).getAsJsonObject().get("items")
@@ -193,8 +197,9 @@ public class DriveREST {
 							.get(ClientResponse.class);
 
 					if (response.getStatus() != 200) {
-						System.out.println(response.getStatus());
-						throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+//						System.out.println(response.getStatus());
+//						throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+						System.err.println("error google downloadfile");
 					}
 
 					InputStream res = response.getEntity(InputStream.class);
@@ -229,7 +234,8 @@ public class DriveREST {
 							.get(ClientResponse.class);
 
 					if (response.getStatus() != 200) {
-						throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+						//throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+						System.err.println("error google exeportfile");
 					}
 
 					InputStream res = response.getEntity(InputStream.class);
@@ -259,9 +265,10 @@ public class DriveREST {
 
 		if (response.getStatus() / 100 != 2) {
 			System.err.println(response.getStatus());
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			//throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			System.err.println("error google removefile");
+			return null;
 		}
-		System.out.println("bonjour");
 		
 		
 		return new GoogleDriveFileRessource();
@@ -325,8 +332,10 @@ public class DriveREST {
 				.header("Authorization", "Bearer " + token).get(ClientResponse.class);
 
 		if (response.getStatus() != 200) {
-			System.out.println(response.getStatus());
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+//			System.out.println(response.getStatus());
+//			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			System.err.println("error google fileAtt");
+			return null;
 		}
 		JsonParser parser = new JsonParser();
 		JsonObject output = parser.parse(response.getEntity(String.class)).getAsJsonObject();
