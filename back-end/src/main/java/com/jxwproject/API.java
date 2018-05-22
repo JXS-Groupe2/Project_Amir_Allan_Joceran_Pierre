@@ -37,6 +37,7 @@ public class API {
 	public API(@PathParam("id") String id) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		
 		this.user = new UsersResource().getUserById(id);
+		System.out.println(id);
 		
 		//this.user = new Gson().fromJson(new FileReader("comptedev.json"), User.class);
 		System.out.println("Dropbox Token : " + user.getDropboxToken());
