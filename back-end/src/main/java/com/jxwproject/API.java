@@ -59,14 +59,14 @@ public class API {
 	public String fileInfo(@PathParam("file") String file) {
 
 		List<MetaFile> mf = new ArrayList<MetaFile>();
+		System.out.println("fileInfo");
 
 		if (user.getGoogleToken() != null) {
-			file = "/"+file;
 			
 			GoogleDriveFileRessource[] files =drive.allFiles(user.getGoogleToken()).getFiles();
 			
 			for ( GoogleDriveFileRessource fichier : files) {
-				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals(file)){
+				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals("/"+file)){
 					GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), fichier.getId());
 
 					MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
@@ -75,14 +75,17 @@ public class API {
 				}
 			}
 
+			System.out.println("end google");
 		}
 		
 		if (user.getDropboxToken() != null) {
 			String meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
+			System.out.println(meta);
 			Gson gson = new Gson();
 			MetaFile mfile = gson.fromJson(meta, MetaFile.class);
+			System.out.println(mfile);
 			mf.add(mfile);
-			
+			System.out.println("end dropbox");
 		}
 
 		return new Gson().toJson(mf);
@@ -106,7 +109,7 @@ public class API {
     	
     	//Deuxième condition pour le compte dev
     	// TODO : supprimer ça une fois les connexions réglés
-    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != ""))
+    	if((user.getDropboxToken() != null))
     	{
     		System.out.println("Récupération des fichiers Dropbox !");
     		dfr = dropbox.getContent(user.getDropboxToken());
@@ -121,7 +124,7 @@ public class API {
     	
     	//Deuxième condition pour le compte dev
     	// TODO : supprimer ça une fois les connexions réglés
-    	if((user.getGoogleToken() != null) || (user.getGoogleToken() != ""))
+    	if((user.getGoogleToken() != null))
     	{
     		System.out.println("Récupération des fichiers Google Drive !");
     		gdfr = drive.getFilesList(user.getGoogleToken());
