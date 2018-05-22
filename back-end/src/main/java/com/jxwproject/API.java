@@ -1,7 +1,6 @@
 package com.jxwproject;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.io.FilenameUtils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.jxwproject.apisrest.DriveREST;
 import com.jxwproject.apisrest.DropboxREST;
@@ -57,27 +54,37 @@ public class API {
 	}
 
 	@GET
-	@Path("/{file}")
+	@Path("/{file: .*}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public MetaFile fileInfo(@PathParam("file") String file) {
 
 		if (user.getGoogleToken() != null) {
-			System.out.println(drive.filePath(file, user.getGoogleToken()));
-			System.out.println("bonjour");
-			GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), file);
+			file = "/"+file;
+			
+			GoogleDriveFileRessource[] files =drive.allFiles(user.getGoogleToken()).getFiles();
+			
+			for ( GoogleDriveFileRessource fichier : files) {
+				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals(file)){
+					GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), fichier.getId());
 
-			MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
-					info.getKind(),0, info.getMimeType());
-			return metafile;
+					MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
+							info.getKind(),0, info.getMimeType());
+					return metafile;
+				}
+			}
+			
 		}
 		
 		if (user.getDropboxToken() != null) {
+			String meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
+			Gson gson = new Gson();
+			MetaFile mfile = gson.fromJson(meta, MetaFile.class);
 			
+			return mfile;
 			
 		}
 
-		
-		
+		System.out.println("no file found");
 		return null;
 	}
 

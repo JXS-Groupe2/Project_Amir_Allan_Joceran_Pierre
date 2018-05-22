@@ -70,7 +70,7 @@ public class DriveREST {
         final WebTarget webtarget = client.target("https://www.googleapis.com").path("drive/v3/files");
 		String response;
 		
-		System.out.println("Envoi de la requête");
+		//System.out.println("Envoi de la requête");
 		response = webtarget
 				.queryParam("q", "%27root%27%20in%20parents")
                 .request(MediaType.APPLICATION_JSON)
@@ -79,7 +79,29 @@ public class DriveREST {
 		
 		Gson gson = new Gson();
 		GoogleDriveFilesList gdfrList = gson.fromJson(response, GoogleDriveFilesList.class);
-		System.out.println("Post processing : "+gdfrList.getKind() + " " +gdfrList.getFiles().length);
+		//System.out.println("Post processing : "+gdfrList.getKind() + " " +gdfrList.getFiles().length);
+
+		return gdfrList;
+
+	}
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public GoogleDriveFilesList allFiles(String token) {
+        final javax.ws.rs.client.Client client = ClientBuilder.newBuilder().build();
+        final WebTarget webtarget = client.target("https://www.googleapis.com").path("drive/v3/files");
+		String response;
+		
+		//System.out.println("Envoi de la requête");
+		response = webtarget
+                .request(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .get(String.class);
+		
+		Gson gson = new Gson();
+		GoogleDriveFilesList gdfrList = gson.fromJson(response, GoogleDriveFilesList.class);
+		//System.out.println("Post processing : "+gdfrList.getKind() + " " +gdfrList.getFiles().length);
 
 		return gdfrList;
 
@@ -266,17 +288,16 @@ public class DriveREST {
 		path.append(fileAttributs(token, file, "title").getAsString());
 		while(true){
 			if (fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("isRoot").getAsBoolean()){
-				path.append("/",0,0);
+				path.insert(0, "/");
 				break;
 			}else{
-				
 				file = fileAttributs(token, file, "parents").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
-				path.append(fileAttributs(token, file, "title").getAsString(),0,0);
+				String parent = fileAttributs(token, file, "title").getAsString();
+				path.insert(0, parent+"/");
 				
 			}	
 			
 		}
-		
 		
 		return path.toString();
 	}
