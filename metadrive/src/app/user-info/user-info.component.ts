@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserInfoComponent implements OnInit {
 
-  constructor() { }
+  userEmail: string;
+
+  constructor() {
+    this.userEmail = localStorage.getItem("userEmail");
+  }
 
   ngOnInit() {
   }
