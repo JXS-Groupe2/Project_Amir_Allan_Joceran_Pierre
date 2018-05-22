@@ -14,6 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.google.gson.Gson;
+
 @Path("users")
 public class UsersResource {
 	public static ArrayList<User> users;
@@ -42,7 +44,7 @@ public class UsersResource {
 					String uniqueID = UUID.randomUUID().toString();
 					user.setId(uniqueID);
 					save();
-					return uniqueID;
+					return new Gson().toJson(uniqueID);
 				}
 			}
 		}
@@ -62,7 +64,8 @@ public class UsersResource {
 		users.add(new User(email, password));
 		save();
 
-		return "user created";
+		
+		return new Gson().toJson("user created");
 	}
 
 	@POST
@@ -76,7 +79,7 @@ public class UsersResource {
 		
 		users.get(indexUserByID(id)).setGoogleToken(token);
 		save();
-		return "google token added";
+		return new Gson().toJson("google token added");
 	}
 
 	@POST
@@ -88,36 +91,29 @@ public class UsersResource {
 		}
 		users.get(indexUserByID(id)).setDropboxToken(token);
 		save();
-		return "dropbox token added";
+		return new Gson().toJson("dropbox token added");
 	}
 
-	@GET
-	@Path("/{user}/google")
-	public String getGoogleToken(@PathParam("user") final String id) {
+//	@GET
+//	@Path("/{user}/google")
+//	public String getGoogleToken(@PathParam("user") final String id) {
+//
+//
+//		return users.get(indexUserByID(id)).getGoogleToken();
+//	}
 
-		
-		if(indexUserByID(id)<0){
-			return null;
-		}
-
-		return users.get(indexUserByID(id)).getGoogleToken();
-	}
-
-	@GET
-	@Path("/{user}/dropbox")
-	public String getDropboxToken(@PathParam("user") final String id) {
-
-		if(indexUserByID(id)<0){
-			return null;
-		}
-
-		return users.get(indexUserByID(id)).getDropboxToken();
-	}
+//	@GET
+//	@Path("/{user}/dropbox")
+//	public String getDropboxToken(@PathParam("user") final String id) {
+//
+//
+//		return users.get(indexUserByID(id)).getDropboxToken();
+//	}
 
 	
-	private User getUser(int index){
-		return users.get(index);
-	}
+//	private User getUser(int index){
+//		return users.get(index);
+//	}
 	
 	public User getUserById(String id){
 		for (User user : users) {
