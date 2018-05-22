@@ -22,9 +22,13 @@ export class GoogleDriveCallbackComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("hash :");
+    console.log(location.hash);
     var accessToken = location.hash.substring(location.hash.indexOf("=") + 1, location.hash.indexOf("&"));
     this.http.get(this.oAuth2Endpoint, {params: {access_token: accessToken}}).subscribe(data => {
       if (!data.hasOwnProperty("error") && (data["aud"] == this.client_id)) {
+        var tokenTest = "ya29.GlzDBZAPsf1QxdSi_xNQfvDFQN1qK0LDCuQ1w5GncJhPTWMR7yiQybNldfonJFJUgOexgyod1bSIxTzaCcOux3iT87X9_8oLWt0AraKT1dGvrGXs-J28l5dNLwd3Wg";
+        console.log("accessToken :", accessToken)
         this.serverEndpoint += "?token=" + accessToken;
         this.http.post(this.serverEndpoint, {observe: "response"}).subscribe(resp => {
           console.log(resp);
