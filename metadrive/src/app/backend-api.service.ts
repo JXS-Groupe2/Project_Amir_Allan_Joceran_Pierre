@@ -27,7 +27,8 @@ export class BackendApiService {
 
   getFiles() {
     var userId = localStorage.getItem("userId");
-    var url = this.serverEndpoint + "/" + userId + "/files";
+    userId = userId.substring(1, userId.length - 1);
+    var url = this.serverEndpoint + "/files/" + userId + "/";
 
     return this.http.get(url, {observe: "response"});
   }

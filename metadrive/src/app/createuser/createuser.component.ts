@@ -34,10 +34,8 @@ export class CreateUserComponent implements OnInit {
 
       this.backend.createUser(credentials).subscribe(resp => {
         console.log(resp);
-        if (resp["status"] == 200 && resp["ok"]) {
-          localStorage.setItem("userId", resp["body"].toString());
-          localStorage.setItem("userEmail", value["email"]);
-          this.router.navigate(["/metadrive"]);
+        if (resp != null) {
+          this.router.navigate(["/login"]);
         } else {
           this.areCredentialsIncorrect = true;
         }
