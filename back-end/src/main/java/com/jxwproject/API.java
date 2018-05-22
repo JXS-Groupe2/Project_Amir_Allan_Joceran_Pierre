@@ -42,7 +42,6 @@ public class API {
 
 		dropbox = new DropboxREST();
 		drive = new DriveREST();
-		System.out.println(id);
 
 	}
 
@@ -151,14 +150,28 @@ public class API {
     @GET
     @Path("{filePath: .*}/remove")
     @Produces(MediaType.APPLICATION_JSON)
-    public String delete(@PathParam("filePath") final String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+    public String delete(@PathParam("filePath") String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 
     	List<MetaFile> meta = new ArrayList<MetaFile>();
     	DropboxFileRessource dropboxRes = null;
-    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
+    	
+    	if((user.getDropboxToken() != null)) {
     		dropboxRes = dropbox.removeFile(user.getDropboxToken(), filePath);		
+    		meta.add(MetaFile.dropboxToMetaFile(dropboxRes));
     	}
-    	meta.add(MetaFile.dropboxToMetaFile(dropboxRes));
+    	
+    	if(user.getGoogleToken()!=null){
+
+    		filePath = "/"+filePath;
+			GoogleDriveFileRessource[] files =drive.allFiles(user.getGoogleToken()).getFiles();
+			
+			for ( GoogleDriveFileRessource fichier : files) {
+				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals(filePath)){
+					meta.add(MetaFile.googleToMetaFile(drive.removeFile(user.getGoogleToken(), fichier.getId())));
+				}
+			}
+    	}
+    	
     	
     	Gson gson = new Gson();
     	
@@ -200,15 +213,29 @@ public class API {
     @GET
     @Path("{filepath: .*}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response download(@PathParam("filepath") final String filePath) {
+    public Response download(@PathParam("filepath") String filePath) {
 		
     	//TODO : Choose between Dropbox & Google Drive
     	Response dropboxRes = null;
     	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
-    		dropboxRes = dropbox.downloadFile(user.getDropboxToken(), filePath);		
+    		dropboxRes = dropbox.downloadFile(user.getDropboxToken(), filePath);
+    		return dropboxRes;
     	}
     	
-    	return dropboxRes;
+    	if(user.getGoogleToken()!=null){
+    		filePath = "/"+filePath;
+			
+			GoogleDriveFileRessource[] files =drive.allFiles(user.getGoogleToken()).getFiles();
+			
+			for ( GoogleDriveFileRessource fichier : files) {
+				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals(filePath)){
+					return drive.downloadFile(user.getGoogleToken(), fichier.getId());
+				}
+			}
+    	}
+    	return null;
+    	
+    	
     }
     
     /**
