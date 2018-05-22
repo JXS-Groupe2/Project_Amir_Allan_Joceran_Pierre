@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-header">Détails</div>
+  <div class="card-block">
+    <div class="row">
+      <div id="filename" class="col">{{selectedFileDetails.details.name}}</div>
+    </div>
+    <div class="row">
+      <div class="col-5">Origine</div>
+      <div class="col">{{selectedFileDetails.details.origin}}</div>
+    </div>
+    <div class="row">
+      <div class="col-5">Type</div>
+      <div class="col">{{selectedFileDetails.details.type}}</div>
+    </div>
+    <div class="row">
+      <div class="col-5">Taille</div>
+      <div class="col">{{selectedFileDetails.details.size}}</div>
+    </div>
+    <button id="btn-remove-file" class="col btn btn-danger" [disabled]="!isSelectedFileRemovable()" (click)="removeSelectedFile()">Supprimer</button>
+  </div>
+</div>

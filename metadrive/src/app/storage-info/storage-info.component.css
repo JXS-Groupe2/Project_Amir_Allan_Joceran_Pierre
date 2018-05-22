@@ -1,0 +1,9 @@
+.card-header {
+  text-align: center;
+  font-weight: bold;
+}
+
+.card-block {
+  text-align: center;
+  padding: 5px;
+}

@@ -1,0 +1,18 @@
+.card-header {
+  text-align: center;
+  font-weight: bold;
+}
+
+.card-block {
+  text-align: center;
+  padding: 5px;
+}
+
+.service-button {
+  width: 130px;
+  font-weight: bold;
+}
+
+.row + .row {
+  margin-top: 5px;
+}

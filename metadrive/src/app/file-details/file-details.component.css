@@ -1,0 +1,23 @@
+.card {
+  position: fixed;
+  width: 200px;
+}
+
+.card-header {
+  text-align: center;
+  font-weight: bold;
+}
+
+.card-block {
+  padding: 5px;
+}
+
+#filename {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#btn-remove-file {
+  margin-top: 20px;
+  font-weight: bold;
+}
