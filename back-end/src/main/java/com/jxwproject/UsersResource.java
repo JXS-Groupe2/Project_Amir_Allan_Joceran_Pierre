@@ -74,8 +74,10 @@ public class UsersResource {
 		
 		
 		if(indexUserByID(id)<0){
+			System.out.println("null");
 			return null;
 		}
+		System.out.println("google");
 		
 		users.get(indexUserByID(id)).setGoogleToken(token);
 		save();

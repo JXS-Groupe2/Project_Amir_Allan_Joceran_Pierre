@@ -18,14 +18,14 @@ export class ExplorerComponent implements OnInit {
   constructor(private backend: BackendApiService, private selectedFileDetails: SelectedFileDetailsService, private http: HttpClient) { }
 
   ngOnInit() {
-    // TODO : récupérer la liste via l'API du back-end
+    /* TODO : récupérer la liste via l'API du back-end
     this.http.get("assets/exampleFileList.json").subscribe(data => {
       this.files = data;
-    });
+    });*/
     
     this.backend.getFiles().subscribe(resp => {
       console.log(resp);
-      //this.files = JSON.parse(resp.body);
+      this.files = resp["body"];
     });
   }
 

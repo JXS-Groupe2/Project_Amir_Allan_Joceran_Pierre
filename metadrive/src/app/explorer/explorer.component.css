@@ -4,6 +4,7 @@
 
 .card-block {
   padding: 10px;
+  min-height: 200px;
 }
 
 .element {

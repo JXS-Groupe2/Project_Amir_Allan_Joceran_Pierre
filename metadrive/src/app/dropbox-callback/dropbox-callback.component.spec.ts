@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GoogleDriveCallbackComponent } from './google-drive-callback.component';
+import { DropboxCallbackComponent } from './dropbox-callback.component';
 
-describe('GoogleDriveCallbackComponent', () => {
-  let component: GoogleDriveCallbackComponent;
-  let fixture: ComponentFixture<GoogleDriveCallbackComponent>;
+describe('DropboxCallbackComponent', () => {
+  let component: DropboxCallbackComponent;
+  let fixture: ComponentFixture<DropboxCallbackComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GoogleDriveCallbackComponent ]
+      declarations: [ DropboxCallbackComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GoogleDriveCallbackComponent);
+    fixture = TestBed.createComponent(DropboxCallbackComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
