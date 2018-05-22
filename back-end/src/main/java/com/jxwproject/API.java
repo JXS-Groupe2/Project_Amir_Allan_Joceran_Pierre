@@ -61,30 +61,30 @@ public class API {
 	public String fileInfo(@PathParam("file") String file) {
 
 		List<MetaFile> mf = new ArrayList<MetaFile>();
+		System.out.println("fileInfo");
 
 		if (user.getGoogleToken() != null) {
-			file = "/"+file;
-			
-			GoogleDriveFileRessource[] files =drive.allFiles(user.getGoogleToken()).getFiles();
-			
-			for ( GoogleDriveFileRessource fichier : files) {
-				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals(file)){
+
+			GoogleDriveFileRessource[] files = drive.allFiles(user.getGoogleToken()).getFiles();
+
+			for (GoogleDriveFileRessource fichier : files) {
+				if (drive.filePath(fichier.getId(), user.getGoogleToken()).equals("/" + file)) {
 					GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), fichier.getId());
 
-					MetaFile metafile = new MetaFile(info.getName(), new SimpleEntry<String, String>("google", info.getId()),
-							info.getKind(),0, info.getMimeType());
+					MetaFile metafile = new MetaFile(info.getName(),
+							new SimpleEntry<String, String>("google", info.getId()), info.getKind(), 0,
+							info.getMimeType());
 					mf.add(metafile);
 				}
 			}
-
 		}
-		
+
 		if (user.getDropboxToken() != null) {
 			DropboxFileRessource meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
-			
 			MetaFile mfile = MetaFile.dropboxToMetaFile(meta);
-			mf.add(mfile);
-			
+			if (mfile != null)
+				mf.add(mfile);
+			System.out.println("end dropbox");
 		}
 
 		return new Gson().toJson(mf);
@@ -121,6 +121,7 @@ public class API {
     	}
     	
     	if(user.getGoogleToken() != null)
+
     	{
     		System.out.println("Récupération des fichiers Google Drive !");
     		gdfr = drive.getFilesList(user.getGoogleToken());
@@ -220,9 +221,7 @@ public class API {
 			}
     	}
     	
-    	
     	Gson gson = new Gson();
-    	
     	return gson.toJson(meta);
     	
     }
