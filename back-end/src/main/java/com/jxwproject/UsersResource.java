@@ -19,23 +19,18 @@ public class UsersResource {
 	public static ArrayList<User> users;
 
 	public UsersResource() {
-		/*
+		
 		try {
 			FileInputStream file = new FileInputStream("users.tmp");
 			ObjectInputStream stream = new ObjectInputStream(file);
 			users = (ArrayList<User>) stream.readObject();
 			stream.close();
-			// System.out.println("uploaded"+users.size());
 		} catch (Exception e) {
 			users = new ArrayList<User>();
 			System.out.println("new file");
 		}
-		*/
-		// TODO A MODIFIER
-		users = new ArrayList<User>();
 		
-		users.add(new User("admin", "password"));
-		users.add(new User("user@example.com", "password"));
+		
 	}
 
 	@GET
@@ -75,11 +70,11 @@ public class UsersResource {
 	public String setGoogleToken(@PathParam("user") final String id, @QueryParam("token") final String token) {
 		
 		
-		if(userById(id)<0){
+		if(indexUserByID(id)<0){
 			return null;
 		}
 		
-		users.get(userById(id)).setGoogleToken(token);
+		users.get(indexUserByID(id)).setGoogleToken(token);
 		save();
 		return "google token added";
 	}
@@ -88,10 +83,10 @@ public class UsersResource {
 	@Path("/{user}/dropbox")
 	public String setDropboxToken(@PathParam("user") final String id, @QueryParam("token") final String token) {
 
-		if(userById(id)<0){
+		if(indexUserByID(id)<0){
 			return null;
 		}
-		users.get(userById(id)).setDropboxToken(token);
+		users.get(indexUserByID(id)).setDropboxToken(token);
 		save();
 		return "dropbox token added";
 	}
@@ -101,31 +96,41 @@ public class UsersResource {
 	public String getGoogleToken(@PathParam("user") final String id) {
 
 		
-		if(userById(id)<0){
+		if(indexUserByID(id)<0){
 			return null;
 		}
 
-		return users.get(userById(id)).getGoogleToken();
+		return users.get(indexUserByID(id)).getGoogleToken();
 	}
 
 	@GET
 	@Path("/{user}/dropbox")
 	public String getDropboxToken(@PathParam("user") final String id) {
 
-		if(userById(id)<0){
+		if(indexUserByID(id)<0){
 			return null;
 		}
 
-		return users.get(userById(id)).getDropboxToken();
+		return users.get(indexUserByID(id)).getDropboxToken();
 	}
 
 	
-	public User getUser(int index){
+	private User getUser(int index){
 		return users.get(index);
 	}
 	
+	public User getUserById(String id){
+		for (User user : users) {
+			if((user.getId()!=null)&&(user.getId().equals(id))){
+				return user;
+			}
+			
+		}
+		
+		return null;
+	}
 	
-	private int userById(String id){
+	private int indexUserByID(String id){
 		for (User user : users) {
 			if((user.getId()!=null)&&(user.getId().equals(id))){
 				return users.indexOf(user);
@@ -135,6 +140,7 @@ public class UsersResource {
 		
 		return -1;
 	}
+	
 	private void save() {
 		try {
 			FileOutputStream file = new FileOutputStream("users.tmp");
