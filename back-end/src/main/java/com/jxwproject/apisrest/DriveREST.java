@@ -247,7 +247,7 @@ public class DriveREST {
 	}
 
 	@DELETE
-	public String removeFile(String token, final String file) {
+	public GoogleDriveFileRessource removeFile(String token, final String file) {
 
 		Client client = Client.create();
 		WebResource webResource = client.resource("https://www.googleapis.com/drive/v3/files/").path(file);
@@ -257,13 +257,15 @@ public class DriveREST {
                 .header("Access-Control-Allow-Origin", "*")
 				.header("Authorization", "Bearer " + token).delete(ClientResponse.class);
 
-		if (response.getStatus() % 100 != 2) {
-			System.out.println(response.getStatus());
+		if (response.getStatus() / 100 != 2) {
+			System.err.println(response.getStatus());
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}
-		String output = response.getEntity(String.class);
+		System.out.println("bonjour");
+		
+		
+		return new GoogleDriveFileRessource();
 
-		return output;
 	}
 
 	@GET
