@@ -36,7 +36,9 @@ public class API {
 	
 	public API(@PathParam("id") String id) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		
-		this.user = new UsersResource().getUserById(id);
+		//this.user = new UsersResource().getUserById(id);
+		
+		this.user = new Gson().fromJson(new FileReader("comptedev.json"), User.class);
 		System.out.println("Dropbox Token : " + user.getDropboxToken());
 		System.out.println("Google Token : " + user.getGoogleToken());
 
@@ -78,9 +80,9 @@ public class API {
 		}
 		
 		if (user.getDropboxToken() != null) {
-			String meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
-			Gson gson = new Gson();
-			MetaFile mfile = gson.fromJson(meta, MetaFile.class);
+			DropboxFileRessource meta = dropbox.getFileMetadata(user.getDropboxToken(), file);
+			
+			MetaFile mfile = MetaFile.dropboxToMetaFile(meta);
 			mf.add(mfile);
 			
 		}
