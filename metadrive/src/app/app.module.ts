@@ -1,11 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { GoogleApiService } from './google-api.service';
+<<<<<<< HEAD
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { ServicesAuthComponent } from './services-auth/services-auth.component';
@@ -20,10 +22,14 @@ import { SelectedFileDetailsService } from './selected-file-details.service';
 import { DropboxCallbackComponent } from './dropbox-callback/dropbox-callback.component';
 import { CreateUserComponent } from './createuser/createuser.component';
 import { DropboxApiService } from './dropbox-api.service';
+=======
+
+>>>>>>> 4a508cfaef71a105538e0d038332e8a63fc956bc
 
 @NgModule({
   declarations: [
     AppComponent,
+<<<<<<< HEAD
     AuthComponent,
     CreateUserComponent,
     MainComponent,
@@ -35,12 +41,15 @@ import { DropboxApiService } from './dropbox-api.service';
     FileDetailsComponent,
     StorageInfoComponent,
     ShortNamePipe,
+=======
+    AuthComponent
+>>>>>>> 4a508cfaef71a105538e0d038332e8a63fc956bc
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
+<<<<<<< HEAD
     AppRoutingModule
   ],
   providers: [
@@ -48,7 +57,10 @@ import { DropboxApiService } from './dropbox-api.service';
     DropboxApiService,
     BackendApiService,
     SelectedFileDetailsService
+=======
+>>>>>>> 4a508cfaef71a105538e0d038332e8a63fc956bc
   ],
+  providers: [GoogleApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

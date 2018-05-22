@@ -39,9 +39,6 @@ hs_err_pid*
 log/
 logs/
 
-#Recommenders
-.recommenders/
-
 
 #---------------------------------------#
 # IDEs & Editors Ignores                #
@@ -53,7 +50,6 @@ logs/
 
 # VS Code
 /.vscode
-tasks.json
 
 # JetBrains IDEs
 .idea/
@@ -130,7 +126,10 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
+<<<<<<< HEAD
 /.metadata/
 back-end/src/main/webapp/uploadTest.html
 #temp file
 users.tmp
+=======
+>>>>>>> 4a508cfaef71a105538e0d038332e8a63fc956bc

@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router'
 import { BackendApiService } from '../backend-api.service';
+=======
+import { GoogleApiService } from '../google-api.service';
+>>>>>>> 4a508cfaef71a105538e0d038332e8a63fc956bc
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css'],
+  styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
+<<<<<<< HEAD
   
   authForm: FormGroup;
   areCredentialsIncorrect = false;
@@ -18,11 +23,23 @@ export class AuthComponent implements OnInit {
       'email': '',
       'password': ''
     })
-  }
+=======
+
+  constructor(private googleApi: GoogleApiService) { }
 
   ngOnInit() {
+>>>>>>> 4a508cfaef71a105538e0d038332e8a63fc956bc
   }
 
+  logInGoogle() {
+    this.googleApi.auth();
+  }
+
+  logInDropbox() {
+    
+  }
+
+<<<<<<< HEAD
   submitForm(value: any) {
     if ((value["email"] == "") || (value["password"] == "")) {
       this.areCredentialsIncorrect = true;
@@ -48,6 +65,10 @@ export class AuthComponent implements OnInit {
 
   createUser() {
     this.router.navigate(["/createUser"]);
+=======
+  logInOneDrive() {
+    
+>>>>>>> 4a508cfaef71a105538e0d038332e8a63fc956bc
   }
 
 }
