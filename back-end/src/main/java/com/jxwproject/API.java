@@ -195,6 +195,7 @@ public class API {
     /**
      * Méthode pour télécharger un fichier.
      * @param filePath
+     * @return la réponse de la requête renvoyant le fichier à télécharger
      */
     @GET
     @Path("{filepath: .*}/download")
@@ -209,4 +210,27 @@ public class API {
     	
     	return dropboxRes;
     }
+    
+    /**
+     * Methode pour renommer un fichier
+     * @param oldFilePath
+     * @param newFilePath
+     * @return Metafile
+     */
+    @GET
+    @Path("{oldFilePath: .*}/rename/{newFilePath: .*}")
+    public String rename(@PathParam("oldFilePath") final String oldFilePath, @PathParam("newFilePath") final String newFilePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		
+    	List<MetaFile> meta = new ArrayList<MetaFile>();
+    	DropboxFileRessource dropboxRes = null;
+    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
+    		dropboxRes = dropbox.renameFile(user.getDropboxToken(), oldFilePath, newFilePath);		
+    	}
+    	meta.add(MetaFile.dropboxToMetaFile(dropboxRes));
+    	
+    	Gson gson = new Gson();
+    	
+    	return gson.toJson(meta);
+    	
+    } 
 }
