@@ -1,0 +1,17 @@
+<div class="container col-lg-3">
+  <div class="card">
+    <div class="card-header">Bienvenue !</div>
+    <div class="card-block">
+      <div class="alert alert-danger" [hidden]="!areCredentialsIncorrect">Veuillez renseigner une adresse mail et un mot de passe</div>
+      <form [formGroup]="createUserForm" (ngSubmit)="submitForm(createUserForm.value)">
+        <div class="form-group">
+          <input type="email" class="form-control" id="email" placeholder="E-mail" [formControl]="authForm.controls['email']">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="password" placeholder="Mot de passe" [formControl]="authForm.controls['password']">
+        </div>
+        <button type="submit" class="btn btn-primary container">Créer le compte</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -17,14 +17,19 @@ import { StorageInfoComponent } from './storage-info/storage-info.component';
 import { BackendApiService } from './backend-api.service';
 import { ShortNamePipe } from './short-name.pipe';
 import { SelectedFileDetailsService } from './selected-file-details.service';
+import { DropboxCallbackComponent } from './dropbox-callback/dropbox-callback.component';
+import { CreateUserComponent } from './createuser/createuser.component';
+import { DropboxApiService } from './dropbox-api.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
+    CreateUserComponent,
     MainComponent,
     ServicesAuthComponent,
     GoogleDriveCallbackComponent,
+    DropboxCallbackComponent,
     ExplorerComponent,
     UserInfoComponent,
     FileDetailsComponent,
@@ -40,6 +45,7 @@ import { SelectedFileDetailsService } from './selected-file-details.service';
   ],
   providers: [
     GoogleApiService,
+    DropboxApiService,
     BackendApiService,
     SelectedFileDetailsService
   ],
