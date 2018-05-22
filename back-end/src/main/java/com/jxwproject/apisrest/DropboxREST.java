@@ -8,6 +8,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -49,6 +51,7 @@ public class DropboxREST{
 			
 			ClientResponse response = webRessource.header("Authorization", "Bearer "+token)
 					.accept("application/plain;charset=dropbox-cors-hack")
+	
 					.post(ClientResponse.class);
 		    
 			if (response.getStatus() != 200) {
@@ -79,6 +82,7 @@ public class DropboxREST{
 											.path("files/get_metadata");
 		Response response = target.request()
 				.header("Authorization", "Bearer "+token)
+
 				.header("Content-Type", "application/plain;charset=dropbox-cors-hack")
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
@@ -113,6 +117,7 @@ public class DropboxREST{
 		
 		ClientResponse response = webRessource.header("Authorization", "Bearer "+token)
 				.header("Dropbox-API-Arg", "{\"path\" : \"/"+filePath+"\"}")
+
 				.accept("application/plain;charset=dropbox-cors-hack")
 				.post(ClientResponse.class);
 	    
@@ -141,6 +146,7 @@ public class DropboxREST{
 											.path("files/list_folder");
 		Response response = target.request()
 				.header("Authorization", "Bearer "+token)
+
 				.header("Content-Type", "application/plain;charset=dropbox-cors-hack")
 				.accept(MediaType.APPLICATION_JSON)
 				.post(Entity.entity(params, MediaType.APPLICATION_JSON), Response.class);
@@ -155,23 +161,16 @@ public class DropboxREST{
 		List<DropboxFileRessource> dfrList = new ArrayList<DropboxFileRessource>();
 		JsonParser parser = new JsonParser();
 		
-		System.out.println("-------------------");
-		System.out.println("Transformation du string en tableau de DropboxFileRessources");
 		JsonObject root = parser.parse(output).getAsJsonObject();
-		System.out.println(root.toString());
 		JsonArray fileList = root.getAsJsonArray("entries");
 		DropboxFileRessource dfr;
 		
 		System.out.println(fileList.toString());
 		System.out.println("Debut du parcours");
 		for (JsonElement file : fileList) {
-			System.out.println("Nouveau fichier en plus");
 		    dfr = gson.fromJson(file, DropboxFileRessource.class);
-		    System.out.println("Nom : "+ dfr.getName());
 		    dfrList.add(dfr);
 		}
-		
-		System.out.println("Renvoi de la list");
 		return dfrList;
 	}
 	
@@ -259,69 +258,59 @@ public class DropboxREST{
 				//header("content-disposition", "attachement; filename ="+fileName+"."+fileExtension)
 				
 	}
-
+	
 
 	/**
-	 * Upload a file to root folder in dropbox (for now)
-	 * TODO : Get the actual folder where the user is
+	 * Créer un fichier dans Dropbox
 	 * 
 	 * @param fileInputStream
 	 * @param fileMetaData
-	 * @return Response ok or not
+	 * @return fileMetaData
 	 * @throws Exception
-	 
+	 */
 	@POST
-	@Path("/uploadFile")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(
-	        @FormDataParam("file") InputStream uploadedInputStream,
-	        @FormDataParam("file") FormDataContentDisposition fileDetail,
-	        @FormDataParam("path") String path) {
-
-
-	    // Path format //localhost/Installables/uploaded/
-	    System.out.println("path:"+path);
-	    String uploadedFileLocation = path	
-	            + fileDetail.getFileName();
-
-	    // save it
-	    writeToFile(uploadedInputStream, uploadedFileLocation);
-
-	    String output = "File uploaded to : " + uploadedFileLocation;
-
-	    return Response.status(200).entity(output).build();
-
+	public DropboxFileRessource createFile(String token, String filePath) {
+		
+        final javax.ws.rs.client.Client client = ClientBuilder.newBuilder().build();
+        final WebTarget webtarget = client
+                .target("https://content.dropboxapi.com")
+                .path("2/files/upload");
+        String response = webtarget.request(MediaType.APPLICATION_OCTET_STREAM)
+                .header("Authorization", "Bearer " + token)
+                .header("Dropbox-API-Arg", "{\"path\": \"/" + filePath + "\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}")
+                .post(Entity.entity(filePath, MediaType.APPLICATION_OCTET_STREAM), String.class);
+        
+        Gson gson = new Gson();
+        DropboxFileRessource dfr = gson.fromJson(response, DropboxFileRessource.class);
+        
+        return dfr;
 	}
 
-	// save uploaded file to new location
-	private void writeToFile(InputStream uploadedInputStream,
-	        String uploadedFileLocation) {
 
-	    try {
-	        OutputStream out = new FileOutputStream(new File(
-	                uploadedFileLocation));
-	        int read = 0;
-	        byte[] bytes = new byte[1024];
-
-	        out = new FileOutputStream(new File(uploadedFileLocation));
-	        while ((read = uploadedInputStream.read(bytes)) != -1) {
-	            out.write(bytes, 0, read);
-	        }
-	        Client client = Client.create();
-			WebResource webRessource = client.resource("https://content.dropboxapi.com/2/files/upload");
-			
-			ClientResponse response = webRessource.header("Authorization", "Bearer "+token)
-					.header("Dropbox-API-Arg", "{\"path:\""+uploadedFileLocation+", \"mode\": \"add\",\"autorename\": true,\"mute\": false}")
-					.header("Content-Type", "application/octet-stream")
-					.post(ClientResponse.class, out);
-			
-	    } catch (IOException e) {
-
-	        e.printStackTrace();
-	    }
-
+	/**
+	 * Supprime un fichier de dropbox
+	 * 
+	 * @param token
+	 * @param filePath
+	 * @return le metadata du fichier, normalement vide.
+	 */
+	public DropboxFileRessource removeFile(String token, String filePath) {
+		
+		final String params = "\r\n{\r\n\"path\" : \"/"+filePath+"\"}";
+        final javax.ws.rs.client.Client client = ClientBuilder.newBuilder().build();
+        final WebTarget webtarget = client
+                .target("https://api.dropboxapi.com")
+                .path("2/files/delete_v2");
+        String response = webtarget.request(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .post(Entity.entity(params, MediaType.APPLICATION_JSON), String.class);
+        
+        Gson gson = new Gson();
+        DropboxFileRessource dfr = gson.fromJson(response, DropboxFileRessource.class);
+        
+        return dfr;
 	}
-	*/
+	
 
 }
 

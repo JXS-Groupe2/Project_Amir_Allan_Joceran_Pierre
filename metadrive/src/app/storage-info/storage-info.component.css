@@ -7,12 +7,3 @@
   text-align: center;
   padding: 5px;
 }
-
-.service-button {
-  width: 100px;
-  font-weight: bold;
-}
-
-.row + .row {
-  margin-top: 5px;
-}

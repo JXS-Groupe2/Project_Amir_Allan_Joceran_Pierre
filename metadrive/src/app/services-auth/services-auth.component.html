@@ -1,3 +1,20 @@
-<button class="btn btn-primary" (click)="logInGoogle()">Log in Google</button>
-<button class="btn btn-primary" (click)="logInDropbox()">Log in Dropbox</button>
-<button class="btn btn-primary" (click)="logInOneDrive()">Log in OneDrive</button>
+<div class="card">
+  <div class="card-header">Services</div>
+  <div class="card-block">
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-primary service-button" (click)="logInGoogle()">Google</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-primary service-button" (click)="logInDropbox()">Dropbox</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="btn service-button" (click)="logInOneDrive()" disabled>OneDrive</button>
+      </div>
+    </div>
+  </div>
+</div>
