@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GoogleApiService } from '../google-api.service';
+import { DropboxApiService } from '../dropbox-api.service';
 
 @Component({
   selector: 'app-services-auth',
@@ -8,7 +9,7 @@ import { GoogleApiService } from '../google-api.service';
 })
 export class ServicesAuthComponent implements OnInit {
 
-  constructor(private googleApi: GoogleApiService) { }
+  constructor(private googleApi: GoogleApiService, private dropboxApi: DropboxApiService) { }
 
   ngOnInit() {
   }
@@ -18,7 +19,7 @@ export class ServicesAuthComponent implements OnInit {
   }
 
   logInDropbox() {
-    // TODO
+    this.dropboxApi.auth();
   }
 
   logInOneDrive() {
