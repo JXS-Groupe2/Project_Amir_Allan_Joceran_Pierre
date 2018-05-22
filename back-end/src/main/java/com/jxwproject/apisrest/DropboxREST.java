@@ -68,7 +68,7 @@ public class DropboxREST{
 	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getFileMetadata(String token, String filepath) {
+	public DropboxFileRessource getFileMetadata(String token, String filepath) {
 		String finalPath;
 		finalPath = "/"+filepath;
 		
@@ -95,8 +95,8 @@ public class DropboxREST{
 		
 		DropboxFileRessource dpf = gson.fromJson(output, DropboxFileRessource.class);
 		
-		String textoutput = "nom : "+dpf.getName() + " | id : "+dpf.getId() + " | path : "+ dpf.getPathLower() +"| type : "+dpf.getFileType();
-		return textoutput;
+		return dpf;
+		
 	}
 	
 	/** Open a file in browser from dropbox with file path
