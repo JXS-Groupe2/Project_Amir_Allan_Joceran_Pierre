@@ -181,7 +181,7 @@ public class DropboxREST{
 		String finalPath;
 		finalPath = "/"+path;
 		
-		final String params = "\r\n{\r\n\"path\" : \""+finalPath+"\", \r\n\"recursive\": false,\"include_media_info\": false,\r\n\"include_deleted\": false,\r\n\"include_has_explicit_shared_members\": false,\r\n\"include_mounted_folders\": true}";
+		final String params = "\r\n{\r\n\"path\" : \""+finalPath+"\", \r\n\"recursive\": true,\"include_media_info\": false,\r\n\"include_deleted\": false,\r\n\"include_has_explicit_shared_members\": false,\r\n\"include_mounted_folders\": true}";
 		
 		ClientConfig config = new ClientConfig();
 		javax.ws.rs.client.Client client = ClientBuilder.newClient(config);
