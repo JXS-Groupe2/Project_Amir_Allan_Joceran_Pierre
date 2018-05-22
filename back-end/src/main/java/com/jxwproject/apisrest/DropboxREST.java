@@ -30,9 +30,6 @@ import com.sun.jersey.api.client.WebResource;
 
 public class DropboxREST{
 
-	//Token de test : à changer tout le temps
-	//private final static String token = "G7zoVR0rS5oAAAAAAAAN9tmXZyESnMYUsTRFCKwwo58DxBTRT1DN2cM6BhGrXlzz";
-	
 	public DropboxREST() {
 		
 	}
@@ -311,6 +308,30 @@ public class DropboxREST{
         return dfr;
 	}
 	
+	/**
+	 * Rename a file
+	 * @param token
+	 * @param filePath
+	 * @return le nouveau filemetadata
+	 */
+	public DropboxFileRessource renameFile(String token, String oldFilePath, String newFilePath) {
+		
+		final String params = "\r\n{\r\n\"from_path\" : \"/"+oldFilePath+"\", \r\n\"to_path\" : \"/"+newFilePath+"\"}";
+        final javax.ws.rs.client.Client client = ClientBuilder.newBuilder().build();
+        final WebTarget webtarget = client
+                .target("https://api.dropboxapi.com")
+                .path("2/files/move_v2");
+        String response = webtarget.request(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .post(Entity.entity(params, MediaType.APPLICATION_JSON), String.class);
+        
+        Gson gson = new Gson();
+        DropboxFileRessource dfr = gson.fromJson(response, DropboxFileRessource.class);
+        
+        return dfr;
+
+		
+	}
 
 }
 
