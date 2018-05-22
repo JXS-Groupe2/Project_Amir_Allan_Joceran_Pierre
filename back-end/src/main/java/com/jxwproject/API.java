@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -37,9 +38,9 @@ public class API {
 	private DriveREST drive;
 
 	public API() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		// this.user = new Gson().fromJson(new FileReader("comptedev.json"),
-		// User.class);
-		this.user = new UsersResource().getUser(0);
+		 this.user = new Gson().fromJson(new FileReader("comptedev.json"),
+		 User.class);
+		//this.user = new UsersResource().getUser(0);
 		System.out.println("Dropbox Token : " + user.getDropboxToken());
 		System.out.println("Google Token : " + user.getGoogleToken());
 
@@ -61,7 +62,7 @@ public class API {
 	@Produces(MediaType.APPLICATION_JSON)
 	public MetaFile fileInfo(@PathParam("file") String file) {
 
-		if (user.getGoogleToken() != null) {
+		if (user.getGoogleToken() != null) {	
 			System.out.println(drive.filePath(file, user.getGoogleToken()));
 			System.out.println("bonjour");
 			GoogleDriveFileRessource info = drive.fileInfo(user.getGoogleToken(), file);
@@ -139,7 +140,7 @@ public class API {
      * @throws JsonSyntaxException 
      */
     @GET
-    @Path("{filePath}/remove")
+    @Path("{filePath: .*}/remove")
     @Produces(MediaType.APPLICATION_JSON)
     public String delete(@PathParam("filePath") final String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 
@@ -165,7 +166,7 @@ public class API {
      * @throws JsonSyntaxException 
      */
     @GET
-    @Path("{filePath}/create")
+    @Path("{filePath: .*}/create")
     @Produces(MediaType.APPLICATION_JSON)
     public String create(@PathParam("filePath") final String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		
@@ -180,5 +181,23 @@ public class API {
     	
     	return gson.toJson(meta);
     	
+    }
+    
+    /**
+     * Méthode pour télécharger un fichier.
+     * @param filePath
+     */
+    @GET
+    @Path("{filepath: .*}/download")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response download(@PathParam("filepath") final String filePath) {
+		
+    	//TODO : Choose between Dropbox & Google Drive
+    	Response dropboxRes = null;
+    	if((user.getDropboxToken() != null) || (user.getDropboxToken() != "")) {
+    		dropboxRes = dropbox.downloadFile(user.getDropboxToken(), filePath);		
+    	}
+    	
+    	return dropboxRes;
     }
 }
