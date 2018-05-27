@@ -96,26 +96,22 @@ public class UsersResource {
 		return new Gson().toJson("dropbox token added");
 	}
 
-//	@GET
-//	@Path("/{user}/google")
-//	public String getGoogleToken(@PathParam("user") final String id) {
-//
-//
-//		return users.get(indexUserByID(id)).getGoogleToken();
-//	}
+	@GET
+	@Path("/{user}/google")
+	public String getGoogleToken(@PathParam("user") final String id) {
 
-//	@GET
-//	@Path("/{user}/dropbox")
-//	public String getDropboxToken(@PathParam("user") final String id) {
-//
-//
-//		return users.get(indexUserByID(id)).getDropboxToken();
-//	}
 
-	
-//	private User getUser(int index){
-//		return users.get(index);
-//	}
+		return users.get(indexUserByID(id)).getGoogleToken();
+	}
+
+	@GET
+	@Path("/{user}/dropbox")
+	public String getDropboxToken(@PathParam("user") final String id) {
+
+
+		return users.get(indexUserByID(id)).getDropboxToken();
+	}
+
 	
 	public User getUserById(String id){
 		for (User user : users) {

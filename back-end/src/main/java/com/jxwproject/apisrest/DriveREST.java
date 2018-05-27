@@ -264,12 +264,10 @@ public class DriveREST {
 				.header("Authorization", "Bearer " + token).delete(ClientResponse.class);
 
 		if (response.getStatus() / 100 != 2) {
-			System.err.println(response.getStatus());
 			//throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			System.err.println("error google removefile");
 			return null;
 		}
-		
 		
 		return new GoogleDriveFileRessource();
 
