@@ -6,7 +6,9 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -197,8 +199,8 @@ public class API {
      * @throws JsonIOException 
      * @throws JsonSyntaxException 
      */
-    @GET
-    @Path("{filePath: .*}/remove")
+    @DELETE
+    @Path("{filePath: .*}")
     @Produces(MediaType.APPLICATION_JSON)
     public String delete(@PathParam("filePath") String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 
@@ -218,11 +220,13 @@ public class API {
 			for ( GoogleDriveFileRessource fichier : files) {
 				if(drive.filePath(fichier.getId(), user.getGoogleToken()).equals(filePath)){
 					meta.add(MetaFile.googleToMetaFile(drive.removeFile(user.getGoogleToken(), fichier.getId())));
+					System.out.println("bye");
 				}
 			}
     	}
     	
     	Gson gson = new Gson();
+    	
     	return gson.toJson(meta);
     	
     }
@@ -235,7 +239,7 @@ public class API {
      * @throws JsonIOException 
      * @throws JsonSyntaxException 
      */
-    @GET
+    @POST
     @Path("{filePath: .*}/create")
     @Produces(MediaType.APPLICATION_JSON)
     public String create(@PathParam("filePath") final String filePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
@@ -292,7 +296,7 @@ public class API {
      * @param newFilePath
      * @return Metafile
      */
-    @GET
+    @POST
     @Path("{oldFilePath: .*}/rename/{newFilePath: .*}")
     public String rename(@PathParam("oldFilePath") final String oldFilePath, @PathParam("newFilePath") final String newFilePath) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		
